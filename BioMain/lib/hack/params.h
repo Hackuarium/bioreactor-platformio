@@ -67,6 +67,9 @@ void saveParameters() {
   for (byte i = 0; i < MAX_PARAM; i++) {
     eeprom_write_word((uint16_t*) EE_START_PARAM + i, parameters[i]);
   }
+    #ifdef EVENT_LOGGING
+ writeLog(EVENT_SAVE_ALL_PARAMETER, 0);
+#endif
 }
 
 /*

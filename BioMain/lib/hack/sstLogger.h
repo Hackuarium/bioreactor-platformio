@@ -6,7 +6,7 @@
   The time synchronization works through the NTP protocol and our server
 ******************************************************************************************/
 
-
+#ifdef THR_SST_LOGGER
 
 #include "../SST/SST.cpp"
 
@@ -51,11 +51,14 @@ void printLoggerHelp(Print* output);
 #define MAX_MULTI_LOG 64 // Allows to display long log on serial
 
 
-#if FLASH_SELECT == D10 //Flash SS_SPI
-SST sst = SST('B', 6); //D10 is B6
+#if FLASH_SELECT == 10 //Flash SS_SPI
+SST sst = SST('B', 6); //D10 is PORT B - 6
+#endif
+#if FLASH_SELECT == 1 //Flash SS_SPI
+SST sst = SST('D', 3); //TX is PORT D - 3
 #endif
 #if FLASH_SELECT == A3 //Flash SS_SPI
-SST sst = SST('F', 4); // A3 is F4
+SST sst = SST('F', 4); // A3 is PORT F - 4
 #endif
 
 
@@ -95,10 +98,6 @@ void writeLog(uint16_t event_number, int parameter_value) {
       Test if it is the begining of one sector, erase the sector of 4096 bytes if needed  delay(2);
     ************************************************************************************/
   if ((!(nextEntryID % NB_ENTRIES_PER_SECTOR))) {
-#ifdef DEBUG_LOGS
-    Serial.print(F("ERASE sctr: "));
-    Serial.println(findSectorOfN());
-#endif
     long start = millis();
     sst.flashSectorErase(startAddress);
 
@@ -140,20 +139,9 @@ void writeLog(uint16_t event_number, int parameter_value) {
   if (sst.flashReadNextInt16() != event_number) isLogValid = false;
   if (sst.flashReadNextInt16() != parameter_value) isLogValid = false;
   sst.flashReadFinish();
-
-#ifdef DEBUG_LOGS
-  Serial.println(F("nextEntryID "));
-  Serial.println(nextEntryID);
-  Serial.println(F("writtenID "));
-  Serial.println(writtenID);
-#endif
-
   if (isLogValid) {
     //Update the value of the next event log position in the memory
     nextEntryID++;
-#ifdef DEBUG_LOGS
-    Serial.print(F("OK"));
-#endif
   } else {
     Serial.print(F("Log fail "));
     Serial.println(nextEntryID);
@@ -187,10 +175,6 @@ uint32_t printLogN(Print* output, uint32_t entryN) {
   }
   nilSemWait(&lockTimeCriticalZone);
   sst.flashReadInit(findAddressOfEntryN(entryN));
-#ifdef DEBUG_LOGS
-  Serial.print(F("entryN: "));
-  Serial.println(entryN);
-#endif
   byte checkDigit = 0;
   for (byte i = 0; i < ENTRY_SIZE_LINEAR_LOGS; i++) {
     byte oneByte = sst.flashReadNextInt8();
@@ -249,15 +233,7 @@ void recoverLastEntryN()
   uint32_t addressEntryN = ADDRESS_BEG;
   boolean found = false;
 
-#ifdef DEBUG_LOGS
-  Serial.print(F("1st addr: "));
-  Serial.println(ADDRESS_BEG);
-  Serial.print(F("Max addr: "));
-  Serial.println(ADDRESS_LAST);
-#endif
-
-  while (addressEntryN < ADDRESS_LAST)
-  {
+  while (addressEntryN < ADDRESS_LAST) {
     sst.flashReadInit(addressEntryN);
     ID_temp = sst.flashReadNextInt32();
     Time_temp = sst.flashReadNextInt32();
