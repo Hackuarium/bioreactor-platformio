@@ -7,7 +7,7 @@ SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific zo
 // Hack library
 #include "NullStream.h"
 #include "toHex.h"
-#include "Utility.h"
+#include "utility.h"
 #include "params.h"
 #include "eeprom.h"
 #include "eepromLogger.h"

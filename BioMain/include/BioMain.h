@@ -28,7 +28,8 @@
   SERIAL, LOGGER AND DEBUGGERS
 *******************************/
 
-#define MAX_PARAM         68
+//#define MAX_PARAM         68
+const int MAX_PARAM = 68;
 
 #ifdef THR_SST_LOGGER
 #define FLASH_SELECT      1 //Flash SS_SPI
@@ -92,7 +93,7 @@
 #define FLAG_OUTPUT_4            5
 
 
-#include "hack.h"
+#include <hack.h>
 
 /**
 void writeLog(uint16_t event_number, int parameter_value);
