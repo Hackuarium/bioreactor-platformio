@@ -68,7 +68,8 @@ const int MAX_PARAM = 68;
 /******************
    FLAG DEFINITION
  ******************/
-#define PARAM_ERROR        24              // Y - errors
+//#define PARAM_ERROR        24              // Y - errors
+extern const int PARAM_ERROR = 24;
 #define FLAG_TEMP_PCB_PROBE_ERROR       0    // pcb probe failed (one wire not answering)
 #define FLAG_TEMP_EXT1_PROBE_ERROR      1   // external temperature 1 probe failed (one wire not answering)
 #define FLAG_TEMP_EXT2_PROBE_ERROR      2   // external temperature 2 probe failed (one wire not answering)

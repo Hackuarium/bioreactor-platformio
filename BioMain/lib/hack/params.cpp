@@ -1,5 +1,13 @@
 
 #include "hackConstants.h"
+#include "A_Parameters.h"
+
+#include <EEPROM.h>
+#include <Arduino.h>
+
+
+extern const int PARAM_ERROR;
+extern const uint8_t EVENT_SAVE_ALL_PARAMETER;
 
 bool getParameterBit(byte number, byte bitToRead) {
   return (parameters[number] >> bitToRead ) & 1;
@@ -61,7 +69,7 @@ void setAndSaveParameter(byte number, int value) {
 }
 
 // this method will check if there was a change in the error status and log it in this case
-boolean saveAndLogError(boolean isError, byte errorFlag) {
+bool saveAndLogError(boolean isError, byte errorFlag) {
   if (isError) {
     if (setParameterBit(PARAM_ERROR, errorFlag)) { // the status has changed
 #ifdef EVENT_LOGGING
