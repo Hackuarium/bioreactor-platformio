@@ -100,7 +100,6 @@ void printLog(Print* output) {
   }
 }
 
-THD_WORKING_AREA( waThreadLogger, 20 );
 THD_FUNCTION ( ThreadLogger, arg ) {
   loggerInit();
   while (true) {
