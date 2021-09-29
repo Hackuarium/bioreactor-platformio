@@ -1,9 +1,9 @@
 #include <avr/eeprom.h>
 
 uint16_t getQualifier();
-boolean setParameterBit(byte number, byte bitToSet);
-boolean clearParameterBit(byte number, byte bitToClear);
-void writeLog(uint16_t event_number, int parameter_value);
+boolean setParameterBit( byte number, byte bitToSet );
+boolean clearParameterBit( byte number, byte bitToClear );
+void writeLog( uint16_t event_number, int parameter_value );
 
 void toggleParameterBit( byte, byte );
 void setupParameters();
