@@ -12,7 +12,7 @@ SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific zo
 #include "eeprom.h"
 #include "eepromLogger.h"
 #include "sstLogger.h"
-#include "WireSlave.h"
+#include "wireSlave.h"
 #include "WireMaster.h"
 #include "SerialUtilities.h"
 #include "Serial.h"

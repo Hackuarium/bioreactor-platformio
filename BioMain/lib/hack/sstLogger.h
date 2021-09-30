@@ -123,7 +123,7 @@ THD_WORKING_AREA(waThreadLogger, 128);
 THD_WORKING_AREA(waThreadLogger, 64);
 #endif
 
-NIL_THREAD(ThreadLogger, arg);
+THD_FUNCTION(ThreadLogger, arg);
 
 #endif
 
