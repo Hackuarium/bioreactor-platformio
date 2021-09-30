@@ -34,7 +34,7 @@ extern const int MAX_PARAM = 68;
 #ifdef THR_SST_LOGGER
 #define FLASH_SELECT      1 //Flash SS_SPI
 //#define LOG_INTERVAL      10  //Interval in (s) between logs logger
-extern const uint8_t LOG_INTERVAL = 10  //Interval in (s) between logs logger
+extern const uint8_t LOG_INTERVAL = 10;  //Interval in (s) between logs logger
 #endif
 
 #define PARAM_STEPPER_SPEED        26   // AA - motor speed, in RPM
@@ -97,11 +97,9 @@ extern const int PARAM_ERROR = 24;
 
 #include <hack.h>
 
-/**
 void writeLog(uint16_t event_number, int parameter_value);
 boolean clearParameterBit(byte number, byte bitToClear);
 void setupMemory();
 void recoverLastEntryN();
 uint8_t loadLastEntryToParameters();
 uint16_t findSectorOfN();
-**/

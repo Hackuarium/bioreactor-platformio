@@ -1,3 +1,5 @@
+#include <ChNil.h>
+
 #include "hack_ChNil.h"
 
 #include <avr/wdt.h>

@@ -34,7 +34,6 @@
 
 #define EVENT_ERROR_NOT_FOUND_ENTRY_N  150
 
-//#define EVENT_SAVE_ALL_PARAMETER     255
-extern const uint8_t EVENT_SAVE_ALL_PARAMETER = 255;
+#define EVENT_SAVE_ALL_PARAMETER     255
 //When parameters are set (and saved) an event is recorded (256-281 : A-Z + .... (if more parameters than 262 ...)
 #define EVENT_PARAMETER_SET          256
