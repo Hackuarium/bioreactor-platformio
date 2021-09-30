@@ -148,7 +148,7 @@ void wireInsertDevice(byte id, byte newDevice) {
   }
 }
 
-boolean wireDeviceExists(byte id) {
+bool wireDeviceExists(byte id) {
   for (byte i = 0; i < numberI2CDevices; i++) {
     if (wireDeviceID[i] == id)
       return true;
