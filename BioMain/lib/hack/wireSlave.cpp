@@ -1,8 +1,10 @@
 // setting ATmega32U4 as I2C slave.
 
 #include "Wire.h"
-#include "BioMain.h"
+#include "Arduino.h"
+#include "params.h"
 
+extern const int MAX_PARAM;
 uint8_t command = 0x00;
 
 void printResult(char *data, Print *output);

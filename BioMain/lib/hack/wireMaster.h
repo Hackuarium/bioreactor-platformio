@@ -27,29 +27,8 @@ byte wireDeviceID[WIRE_MAX_DEVICES];
 
 void wireUpdateList();
 
-NIL_WORKING_AREA(waThreadWireMaster, 200);
-NIL_THREAD(ThreadWireMaster, arg) {
-
-  nilThdSleepMilliseconds(1000);
-
-  unsigned int wireEventStatus = 0;
-
-  WireM.begin();
-
-  while (true) {
-
-#ifdef WIRE_MASTER_HOT_PLUG
-    // allows to log when devices are plugged in / out
-    // not suitable for i2c slave sleep mode
-    if (wireEventStatus % 25 == 0) {
-      wireUpdateList();
-    }
-#endif
-    wireEventStatus++;
-
-    nilThdSleepMilliseconds(200);
-  }
-}
+THD_WORKING_AREA(waThreadWireMaster, 200);
+THD_FUNCTION(ThreadWireMaster, arg);
 
 int wireReadInt(uint8_t address) {
   nilSemWait(&lockTimeCriticalZone);

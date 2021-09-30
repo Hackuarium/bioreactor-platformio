@@ -1,6 +1,4 @@
-#include <ChNil.h>
-
-SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific zones
+#include "hack_ChNil.h"
 
 #include <avr/wdt.h>
 
@@ -13,7 +11,7 @@ SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific zo
 #include "eepromLogger.h"
 #include "sstLogger.h"
 #include "wireSlave.h"
-#include "WireMaster.h"
+#include "wireMaster.h"
 #include "SerialUtilities.h"
 #include "Serial.h"
 #include "status.h"
