@@ -1,6 +1,9 @@
 // code taken from https://github.com/Hackuarium/simple-spectro/tree/master/arduino/SimpleSpectro. Thread allowing serail over usb communication.
-
-#ifdef THR_SERIAL
+#include <Arduino.h>
+#include <ChNil.h>
+#include "params.h"
+#include "BioMain.h"
+#include "hackConstants.h"
 
 #define SERIAL_BUFFER_LENGTH           32
 #define SERIAL_MAX_PARAM_VALUE_LENGTH  32
@@ -12,9 +15,7 @@ void printHelp(Print* output);
 void processSpecificCommand(char* data, char* paramValue, Print* output);
 void printSpecificHelp(Print * output);
 
-
-NIL_WORKING_AREA(waThreadSerial, 96); // minimum 96
-NIL_THREAD(ThreadSerial, arg) {
+THD_FUNCTION(ThreadSerial, arg) {
   Serial.begin(9600);
   while (true) {
     while (Serial.available()) {
@@ -38,7 +39,7 @@ NIL_THREAD(ThreadSerial, arg) {
         }
       }
     }
-    nilThdSleepMilliseconds(1);
+    chThdSleep(1);
   }
 }
 
@@ -190,7 +191,3 @@ void printHelp(Print* output) {
 void noThread(Print* output) {
   output->println(F("No Thread"));
 }
-
-
-
-#endif

@@ -12,8 +12,8 @@
 #include "sstLogger.h"
 #include "wireSlave.h"
 #include "wireMaster.h"
-#include "SerialUtilities.h"
-#include "Serial.h"
+#include "serialUtilities.h"
+#include "serial.h"
 #include "status.h"
 #include "start.h"
 
