@@ -14,4 +14,6 @@
 #include "EEPROMHack.h"
 #include "EEPROMLogger.h"
 #include "SSTLogger.h"
+#include "WireSlave.h"
+#include "WireMaster.h"
 
