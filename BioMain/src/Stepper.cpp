@@ -7,6 +7,7 @@
  ******************************/
 
 #include <Arduino.h>
+#include <ChNil.h>
 
 #include "TimerOne.h"
 #include "status.h"
