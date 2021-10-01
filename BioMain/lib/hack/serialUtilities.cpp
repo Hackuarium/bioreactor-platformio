@@ -1,7 +1,7 @@
 // code taken from https://github.com/Hackuarium/simple-spectro/tree/master/arduino/SimpleSpectro. Allows serial monitoring communication.
 #include <ChNil.h>
 #include <Arduino.h>
-#include "Time.h"
+#include "TimeLib.h"
 #include "params.h"
 #include <eeprom.h>
 

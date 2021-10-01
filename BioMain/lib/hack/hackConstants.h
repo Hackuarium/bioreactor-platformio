@@ -1,10 +1,11 @@
-#include "BioMain.h"
+//#include "BioMain.h"
 // CONSTANTS
 
 // params.h
 #define INT_MAX_VALUE       32767
 #define INT_MIN_VALUE       -32768
 #define LONG_MAX_VALUE      2147483647
+extern const int MAX_PARAM = 68;
 
 // value that should not be taken into account
 // in case of error the parameter is set to this value
@@ -18,5 +19,4 @@
 #define EEPROM_MIN_ADDR            0
 #define EEPROM_MAX_ADDR          1023
 
-extern const int MAX_PARAM;
 int parameters[MAX_PARAM];

@@ -6,47 +6,6 @@
 
 HX711 scale( WEIGHT_DATA, WEIGHT_CLK );
 
-THD_FUNCTION( ThreadWeight, arg ) {
-  chThdSleep(1234); // wait a little bit not everything starts at once
-
-  /********************************************
-               initialisation
-  ********************************************/
-  int weight;
-
-  /********************************************
-               Thread Loop
-  ********************************************/
-  while (true) {
-    chThdSleep(1000);
-
-    weight = getWeight(); //sensor read, better to have a higher value if the weight increase
-    setParameter(PARAM_WEIGHT, weight);
-    setParameter(PARAM_WEIGHT_G, convertWeightToG(weight));
-
-    // are we outside ranges ?
-
-    int error = (getParameter(PARAM_WEIGHT_MAX) - getParameter(PARAM_WEIGHT_MIN)) / 5;
-
-    if ((error > 0 && ((weight < (getParameter(PARAM_WEIGHT_MIN) - error)) || (weight > (getParameter(PARAM_WEIGHT_MAX) + error)))) ||
-        (error < 0 && ((weight > (getParameter(PARAM_WEIGHT_MIN) - error)) || (weight < (getParameter(PARAM_WEIGHT_MAX) + error))))) {
-      saveAndLogError(true, FLAG_WEIGHT_RANGE_ERROR);
-    } else {
-      saveAndLogError(false, FLAG_WEIGHT_RANGE_ERROR);
-    }
-
-  }
-}
-
-void printWeightHelp(Print* output) {
-  output->println(F("Weight help"));
-  output->println(F("(we) Empty (tare)"));
-  output->println(F("(wk) Empty + 1kg"));
-  output->println(F("(wl) Low level"));
-  output->println(F("(wh) High level"));
-  output->println(F("(wt) Test"));
-}
-
 int getWeight() { // we can not avoid to have some errors measuring the weight
   // and currently we don't know where it is coming from
   // so we need to find out what are the correct values and what are the wrong one
@@ -82,10 +41,18 @@ int getWeight() { // we can not avoid to have some errors measuring the weight
   return weight / counter / 100;
 }
 
+void printWeightHelp(Print* output) {
+  output->println(F("Weight help"));
+  output->println(F("(we) Empty (tare)"));
+  output->println(F("(wk) Empty + 1kg"));
+  output->println(F("(wl) Low level"));
+  output->println(F("(wh) High level"));
+  output->println(F("(wt) Test"));
+}
+
 int convertWeightToG(int weight) {
   return ((long)(weight - getParameter(PARAM_WEIGHT_OFFSET)) * 1000) / getParameter(PARAM_WEIGHT_FACTOR);
 }
-
 
 void processWeightCommand(char command, char* data, Print * output) {
   int weight = getWeight();
@@ -118,5 +85,37 @@ void processWeightCommand(char command, char* data, Print * output) {
       break;
     default:
       printWeightHelp(output);
+  }
+}
+
+THD_FUNCTION( ThreadWeight, arg ) {
+  chThdSleep(1234); // wait a little bit not everything starts at once
+
+  /********************************************
+               initialisation
+  ********************************************/
+  int weight;
+
+  /********************************************
+               Thread Loop
+  ********************************************/
+  while (true) {
+    chThdSleep(1000);
+
+    weight = getWeight(); //sensor read, better to have a higher value if the weight increase
+    setParameter(PARAM_WEIGHT, weight);
+    setParameter(PARAM_WEIGHT_G, convertWeightToG(weight));
+
+    // are we outside ranges ?
+
+    int error = (getParameter(PARAM_WEIGHT_MAX) - getParameter(PARAM_WEIGHT_MIN)) / 5;
+
+    if ((error > 0 && ((weight < (getParameter(PARAM_WEIGHT_MIN) - error)) || (weight > (getParameter(PARAM_WEIGHT_MAX) + error)))) ||
+        (error < 0 && ((weight > (getParameter(PARAM_WEIGHT_MIN) - error)) || (weight < (getParameter(PARAM_WEIGHT_MAX) + error))))) {
+      saveAndLogError(true, FLAG_WEIGHT_RANGE_ERROR);
+    } else {
+      saveAndLogError(false, FLAG_WEIGHT_RANGE_ERROR);
+    }
+
   }
 }

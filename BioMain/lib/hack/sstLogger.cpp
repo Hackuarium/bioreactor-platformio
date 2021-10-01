@@ -11,7 +11,7 @@
 
 #include "SST.h"
 #include <SPI.h>
-#include "Time.h"
+#include "TimeLib.h"
 #include "hack.h"
 #include "A_Parameters.h"
 
@@ -65,8 +65,6 @@ SST sst = SST('D', 3); //TX is PORT D - 3
 #if FLASH_SELECT == A3 //Flash SS_SPI
 SST sst = SST('F', 4); // A3 is PORT F - 4
 #endif
-
-
 
 static uint32_t nextEntryID = 0;
 boolean logActive = false;

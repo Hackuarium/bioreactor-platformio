@@ -1,6 +1,7 @@
 #include <Arduino.h>
 
 #include "BioMain.h"
+#include "SerialSpecific.h"
 
 void oneWireInfo(Print* output);
 

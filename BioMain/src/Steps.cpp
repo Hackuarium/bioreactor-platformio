@@ -4,6 +4,17 @@
 
 bool DEBUG_STEPS = false;
 
+byte getMinute() {
+  return (byte)((millis() % 3600000) / 60000);
+}
+
+void printBits(int x) {
+  for (byte i = 16; i > 0; i--) {
+    Serial.print(x >> (i - 1) & 1);
+  }
+  Serial.println("");
+}
+
 THD_FUNCTION( ThreadSteps, arg ) {
   chThdSleep(3129); // wait a little bit not everything starts at once
 
@@ -94,15 +105,4 @@ THD_FUNCTION( ThreadSteps, arg ) {
     setParameter(PARAM_CURRENT_STEP, index);
     chThdSleep(1000);
   }
-}
-
-byte getMinute() {
-  return (byte)((millis() % 3600000) / 60000);
-}
-
-void printBits(int x) {
-  for (byte i = 16; i > 0; i--) {
-    Serial.print(x >> (i - 1) & 1);
-  }
-  Serial.println("");
 }

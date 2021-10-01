@@ -2,17 +2,6 @@
 #include "BioMain.h"
 #include "params.h"
 
-THD_FUNCTION(ThreadFan, arg)
-{
-  chThdSleep(1000);
-  pinMode(OUT_FAN, OUTPUT);
-
-  while (true) {
-    setFan();
-    chThdSleep(2000); 
-  }
-}
-
 /*Temperature PID Control addressing relay*/
 
 void setFan() {
@@ -24,3 +13,15 @@ void setFan() {
   }
 
 }
+
+THD_FUNCTION(ThreadFan, arg)
+{
+  chThdSleep(1000);
+  pinMode(OUT_FAN, OUTPUT);
+
+  while (true) {
+    setFan();
+    chThdSleep(2000); 
+  }
+}
+

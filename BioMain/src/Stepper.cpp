@@ -29,6 +29,18 @@ bool isStepperStopped() {
   return false;
 }
 
+void doSteps(int speed, int sleep) {
+  if (speed < MIN_STEPPER_SPEED) speed = MIN_STEPPER_SPEED;
+  if (speed > MAX_STEPPER_SPEED) speed = MAX_STEPPER_SPEED;
+  if (isStepperStopped()) {
+    Timer1.stop();
+  } else {
+    Timer1.setPeriod(1000000 / 3200 / speed * 60);
+    Timer1.start();
+  }
+  chThdSleep(sleep);
+}
+
 //--------------- STEPPER THREAD ---------------//
 
 THD_FUNCTION(ThreadStepper, arg) {
@@ -76,16 +88,4 @@ THD_FUNCTION(ThreadStepper, arg) {
     }
 
   }
-}
-
-void doSteps(int speed, int sleep) {
-  if (speed < MIN_STEPPER_SPEED) speed = MIN_STEPPER_SPEED;
-  if (speed > MAX_STEPPER_SPEED) speed = MAX_STEPPER_SPEED;
-  if (isStepperStopped()) {
-    Timer1.stop();
-  } else {
-    Timer1.setPeriod(1000000 / 3200 / speed * 60);
-    Timer1.start();
-  }
-  chThdSleep(sleep);
 }

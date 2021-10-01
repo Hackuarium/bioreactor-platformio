@@ -51,8 +51,6 @@ void printLoggerHelp( Print* );
 
 #define MAX_MULTI_LOG 64 // Allows to display long log on serial
 
-SST sst;
-
 static uint32_t nextEntryID = 0;
 bool logActive;
 

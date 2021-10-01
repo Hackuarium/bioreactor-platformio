@@ -1,7 +1,7 @@
 #include <ChNil.h>
 #include <Arduino.h>
-
 #include <Wire.h>
+
 /*
  FLUX
  - B1011 XXX R/W  (XXX is the user defined address and R/W the read/write byte) --> TBD
@@ -13,40 +13,6 @@
 byte numberI2CDevices=0;
 byte wireDeviceID[WIRE_MAX_DEVICES];
 
-THD_FUNCTION(ThreadWire, arg) {
-
-  chThdSleep(1000);
-
-  byte aByte=0;
-  byte* wireFlag32=&aByte;
-  unsigned int wireEventStatus=0;
-  Wire.begin();
-         
-  chThdSleep(10000); //wait for probe warm-up
-
-  while(true) {
-
-    if (wireEventStatus%25==0) {
-      wireUpdateList();
-    }
-    wireEventStatus++;
-
-    /*********
-     *  pH
-     *********/    
-
-    #ifdef GAS_CTRL
-      getAnemometer(gas_wire_write);
-    #endif
-
-  
-    #ifdef MODE_CALIBRATE //update faster in calibration mode
-    nilThdSleepMilliseconds(100); 
-    #else
-    chThdSleep(500); 
-    #endif
-  }
-}
 
 
 /********************
@@ -89,6 +55,24 @@ void wireInfo(Print* output) {
   }
 }
 
+void wireRemoveDevice(byte id) {
+  for (byte i=id; i<numberI2CDevices-1; i++) {
+    wireDeviceID[i]=wireDeviceID[i+1];
+  }
+  numberI2CDevices--;
+}
+
+void wireInsertDevice(byte id, byte newDevice) {
+  //Serial.println(id);
+
+  if (numberI2CDevices<WIRE_MAX_DEVICES) {
+    for (byte i=id+1; i<numberI2CDevices-1; i++) {
+      wireDeviceID[i]=wireDeviceID[i+1];
+    }
+    wireDeviceID[id]=newDevice;
+    numberI2CDevices++;
+  } 
+}
 
 void wireUpdateList() {
   // 16ms
@@ -124,26 +108,7 @@ void wireUpdateList() {
   }
 }
 
-void wireRemoveDevice(byte id) {
-  for (byte i=id; i<numberI2CDevices-1; i++) {
-    wireDeviceID[i]=wireDeviceID[i+1];
-  }
-  numberI2CDevices--;
-}
-
-void wireInsertDevice(byte id, byte newDevice) {
-  //Serial.println(id);
-
-  if (numberI2CDevices<WIRE_MAX_DEVICES) {
-    for (byte i=id+1; i<numberI2CDevices-1; i++) {
-      wireDeviceID[i]=wireDeviceID[i+1];
-    }
-    wireDeviceID[id]=newDevice;
-    numberI2CDevices++;
-  } 
-}
-
-boolean wireDeviceExists(byte id) {
+bool wireDeviceExists(byte id) {
   for (byte i=0; i<numberI2CDevices; i++) {
     if (wireDeviceID[i]==id) return true;
   }
@@ -165,3 +130,37 @@ boolean wireFlagStatus(byte *aByte, byte address) {
   return *aByte & (1 << (address & 0b00000111));
 }
 
+THD_FUNCTION(ThreadWire, arg) {
+
+  chThdSleep(1000);
+
+  byte aByte=0;
+  byte* wireFlag32=&aByte;
+  unsigned int wireEventStatus=0;
+  Wire.begin();
+         
+  chThdSleep(10000); //wait for probe warm-up
+
+  while(true) {
+
+    if (wireEventStatus%25==0) {
+      wireUpdateList();
+    }
+    wireEventStatus++;
+
+    /*********
+     *  pH
+     *********/    
+
+    #ifdef GAS_CTRL
+      getAnemometer(gas_wire_write);
+    #endif
+
+  
+    #ifdef MODE_CALIBRATE //update faster in calibration mode
+    nilThdSleepMilliseconds(100); 
+    #else
+    chThdSleep(500); 
+    #endif
+  }
+}

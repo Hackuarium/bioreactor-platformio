@@ -1,3 +1,6 @@
+#include <Arduino.h>
+#include <stdint.h>
+
 #define STEPPER_DIRECTION  8
 #define STEPPER_STEP       9
 
