@@ -174,3 +174,25 @@ extern const int PARAM_ERROR;
 #define EEPROM_MAX_ADDR          1023
 
 extern int parameters[MAX_PARAM];
+
+
+/*******************************************************************************
+      Serial.h
+*******************************************************************************/
+
+#define SERIAL_BUFFER_LENGTH           32
+#define SERIAL_MAX_PARAM_VALUE_LENGTH  32
+
+// setting ATmega32U4 as I2C slave.
+#ifndef I2C_HARDWARE
+#define I2C_HARDWARE 1
+#endif
+
+
+/*******************************************************************************
+      WireMaster.h
+*******************************************************************************/
+
+#define I2C_TIMEOUT 10
+#define I2C_SLOWMODE 1
+#define WIRE_MAX_DEVICES 8

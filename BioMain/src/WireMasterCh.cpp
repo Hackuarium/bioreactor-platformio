@@ -3,17 +3,14 @@
 
 #include "BioParams.h"
 #include "Params.h"
-//#include "Sem.h"
+
+// #define WIRE_MASTER_HOT_PLUG 1  // scan for new devices preventing sleep mode
+// of I2C slaves
+
+byte numberI2CDevices = 0;
+byte wireDeviceID[WIRE_MAX_DEVICES];
 
 SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific zones
-
-// setting ATmega32U4 as I2C slave.
-#ifndef I2C_HARDWARE
-#define I2C_HARDWARE 1
-#endif
-
-#define I2C_TIMEOUT 10
-#define I2C_SLOWMODE 1
 
 #if I2C_HARDWARE == 1
 #include <Wire.h>
@@ -23,15 +20,6 @@ TwoWire WireM = TwoWire();
 #include "SoftWire.h"
 SoftWire WireM = SoftWire();
 #endif
-
-// #define WIRE_MASTER_HOT_PLUG 1  // scan for new devices preventing sleep mode
-// of I2C slaves
-
-#define WIRE_MAX_DEVICES 8
-byte numberI2CDevices = 0;
-byte wireDeviceID[WIRE_MAX_DEVICES];
-
-void wireUpdateList();
 
 THD_FUNCTION(ThreadWireMaster, arg) {
 
@@ -90,7 +78,7 @@ int wireReadIntRegister(uint8_t address, uint8_t registerAddress) {
   return wireReadInt(address);
 }
 
-int wireCopyParameter(uint8_t address, uint8_t registerAddress,
+void wireCopyParameter(uint8_t address, uint8_t registerAddress,
                       uint8_t parameterID) {
   setParameter(parameterID, wireReadIntRegister(address, registerAddress));
 }
@@ -105,31 +93,6 @@ void wireWriteIntRegister(uint8_t address, uint8_t registerAddress, int value) {
   WireM.endTransmission(); // Send data to I2C dev with option for a repeated
                            // start
   chSemSignal(&lockTimeCriticalZone);
-}
-
-void printWireInfo(Print *output) {
-  wireUpdateList();
-  output->println("I2C");
-
-  for (byte i = 0; i < numberI2CDevices; i++) {
-    output->print(i);
-    output->print(F(": "));
-    output->print(wireDeviceID[i]);
-    output->print(F(" - "));
-    output->println(wireDeviceID[i], BIN);
-  }
-}
-
-void printWireDeviceParameter(Print *output, uint8_t wireID) {
-  output->println(F("I2C device: "));
-  output->println(wireID);
-  for (byte i = 0; i < 26; i++) {
-    output->print((char)(i + 65));
-    output->print(" : ");
-    output->print(i);
-    output->print(F(" - "));
-    output->println(wireReadIntRegister(wireID, i));
-  }
 }
 
 void wireRemoveDevice(byte id) {
@@ -149,14 +112,6 @@ void wireInsertDevice(byte id, byte newDevice) {
     wireDeviceID[id] = newDevice;
     numberI2CDevices++;
   }
-}
-
-bool wireDeviceExists(byte id) {
-  for (byte i = 0; i < numberI2CDevices; i++) {
-    if (wireDeviceID[i] == id)
-      return true;
-  }
-  return false;
 }
 
 void wireUpdateList() {
@@ -195,6 +150,41 @@ void wireUpdateList() {
     wireRemoveDevice(currentPosition);
   }
 }
+
+void printWireInfo(Print *output) {
+  wireUpdateList();
+  output->println("I2C");
+
+  for (byte i = 0; i < numberI2CDevices; i++) {
+    output->print(i);
+    output->print(F(": "));
+    output->print(wireDeviceID[i]);
+    output->print(F(" - "));
+    output->println(wireDeviceID[i], BIN);
+  }
+}
+
+void printWireDeviceParameter(Print *output, uint8_t wireID) {
+  output->println(F("I2C device: "));
+  output->println(wireID);
+  for (byte i = 0; i < 26; i++) {
+    output->print((char)(i + 65));
+    output->print(" : ");
+    output->print(i);
+    output->print(F(" - "));
+    output->println(wireReadIntRegister(wireID, i));
+  }
+}
+
+
+bool wireDeviceExists(byte id) {
+  for (byte i = 0; i < numberI2CDevices; i++) {
+    if (wireDeviceID[i] == id)
+      return true;
+  }
+  return false;
+}
+
 
 void printWireHelp(Print *output) {
   output->println(F("(il) List devices"));
