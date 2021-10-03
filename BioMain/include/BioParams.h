@@ -18,17 +18,17 @@
   THREADS
 *******************************/
 
-#define THR_WIRE_MASTER 1
+// #define THR_WIRE_MASTER 1
 #define THR_SST_LOGGER  1
 #define THR_SERIAL      1
-#define THR_ONEWIRE     1
-#define THR_PID         1
-#define THR_FAN         1
-#define THR_ERROR       1
-#define THR_STEPPER     1
-#define THR_STEPS       1
-#define THR_WEIGHT      1
-#define THR_OUTPUTS     1
+// #define THR_ONEWIRE     1
+// #define THR_PID         1
+// #define THR_FAN         1
+// #define THR_ERROR       1
+// #define THR_STEPPER     1
+// #define THR_STEPS       1
+// #define THR_WEIGHT      1
+// #define THR_OUTPUTS     1
 #define THR_MONITORING  1
 
 #define MONITORING_LED  13
@@ -52,8 +52,8 @@
 
 #define EVENT_ERROR_NOT_FOUND_ENTRY_N  150
 
-//#define EVENT_SAVE_ALL_PARAMETER     255
-extern const uint8_t EVENT_SAVE_ALL_PARAMETER;
+#define EVENT_SAVE_ALL_PARAMETER     255
+//extern const uint8_t EVENT_SAVE_ALL_PARAMETER;
 //When parameters are set (and saved) an event is recorded (256-281 : A-Z + .... (if more parameters than 262 ...)
 #define EVENT_PARAMETER_SET          256
 
@@ -81,7 +81,7 @@ extern const uint8_t EVENT_SAVE_ALL_PARAMETER;
 #define PID_CONTROL        6
 
 
-#define EVENT_LOGGING  1
+//#define EVENT_LOGGING  1
 
 /******************************
   SERIAL, LOGGER AND DEBUGGERS
@@ -90,9 +90,8 @@ extern const uint8_t EVENT_SAVE_ALL_PARAMETER;
 #define MAX_PARAM         68
 
 #ifdef THR_SST_LOGGER
-#define FLASH_SELECT      1 //Flash SS_SPI
-//#define LOG_INTERVAL      10  //Interval in (s) between logs logger
-extern const uint8_t LOG_INTERVAL;  //Interval in (s) between logs logger
+  #define FLASH_SELECT      1 //Flash SS_SPI
+  #define LOG_INTERVAL      10  //Interval in (s) between logs logger
 #endif
 
 #define PARAM_STEPPER_SPEED        26   // AA - motor speed, in RPM
@@ -127,8 +126,8 @@ extern const uint8_t LOG_INTERVAL;  //Interval in (s) between logs logger
 /******************
    FLAG DEFINITION
  ******************/
-//#define PARAM_ERROR        24              // Y - errors
-extern const int PARAM_ERROR;
+#define PARAM_ERROR        24              // Y - errors
+//extern const int PARAM_ERROR;
 #define FLAG_TEMP_PCB_PROBE_ERROR       0    // pcb probe failed (one wire not answering)
 #define FLAG_TEMP_EXT1_PROBE_ERROR      1   // external temperature 1 probe failed (one wire not answering)
 #define FLAG_TEMP_EXT2_PROBE_ERROR      2   // external temperature 2 probe failed (one wire not answering)
@@ -173,9 +172,6 @@ extern const int PARAM_ERROR;
 #define EEPROM_MIN_ADDR            0
 #define EEPROM_MAX_ADDR          1023
 
-extern int parameters[MAX_PARAM];
-
-
 /*******************************************************************************
       Serial.h
 *******************************************************************************/
@@ -196,3 +192,16 @@ extern int parameters[MAX_PARAM];
 #define I2C_TIMEOUT 10
 #define I2C_SLOWMODE 1
 #define WIRE_MAX_DEVICES 8
+
+
+/*******************************************************************************
+      EEPROMLogger.h
+*******************************************************************************/
+//#define LOG_INTERVAL      10  //Interval in (s) between logs logger
+
+#define LOG_ENTRY_LENGTH    ( NB_PARAMETERS_LINEAR_LOGS + 2 ) * 2
+#define NUMBER_LOGS         960/LOG_ENTRY_LENGTH
+
+#define FIRST_ADDRESS   64
+#define LAST_ADDRESS   1023
+

@@ -10,6 +10,10 @@
 // Import internal libraries
 #include "BioHack.h"
 
+void checkParameters();
+void initParameters();
+
+//#include "SSTThread.h"
 
 /*********
    SETUP
@@ -18,13 +22,13 @@ void setup() {
   delay(1000);
   Serial.begin(9600);
   delay(1000);
-  //setupParameters();
+  setupParameters();
 
 #ifdef FLASH_SELECT
   pinMode(FLASH_SELECT, OUTPUT);
   setupMemory();
-  recoverLastEntryN();
-  loadLastEntryToParameters();   //get back the previous config
+  //recoverLastEntryN();
+  //loadLastEntryToParameters();   //get back the previous config
 #endif
 
   chBegin();

@@ -10,16 +10,6 @@
 // ID is a sequential number
 // We expect to add an entry every hour
 
-#define FIRST_ADDRESS   64
-#define LAST_ADDRESS   1023
-
-extern const byte LOG_ENTRY_LENGTH;
-extern const byte NUMBER_LOGS;
-
-unsigned long lastLog;
-uint16_t eepromLoggerID;
-uint16_t eepromLoggerTimeBetween;
-
 int getFirstAddress( uint16_t );
 void writeLog();
 void loggerInit();

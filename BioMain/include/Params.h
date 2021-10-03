@@ -5,10 +5,12 @@
 
 #include "BioParams.h"
 
-uint16_t getQualifier();
+extern int parameters[MAX_PARAM];
+
+//uint16_t getQualifier();
 bool setParameterBit( byte number, byte bitToSet );
 bool clearParameterBit( byte number, byte bitToClear );
-void writeLog( uint16_t event_number, int parameter_value );
+//void writeLog( uint16_t event_number, int parameter_value );
 
 void toggleParameterBit( byte, byte );
 void setupParameters();

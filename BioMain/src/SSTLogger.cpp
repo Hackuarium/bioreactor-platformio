@@ -5,6 +5,11 @@
   The thread write the logs at a definite fixed interval of time in the SST25VF064 chip
   The time synchronization works through the NTP protocol and our server
 ******************************************************************************************/
+#include "BioHack.h"
+#include "BioParams.h"
+
+#ifdef THR_SST_LOGGER
+
 #include <Arduino.h>
 #include <ChNil.h>
 
@@ -14,12 +19,9 @@
 #include <TimeLib.h>
 #include <avr/wdt.h>
 
-#include "BioHack.h"
-#include "BioParams.h"
+
 //#include "Sem.h"
 SEMAPHORE_DECL(lockTimeCriticalZone2, 1); // only one process in some specific zones
-
-void printLoggerHelpSST(Print* output);
 
 /******************************************
    DEFINE FLASH VERSION (default is SST64)
@@ -68,7 +70,7 @@ SST sst = SST('D', 3); //TX is PORT D - 3
 SST sst = SST('F', 4); // A3 is PORT F - 4
 #endif
 
-static uint32_t nextEntryID = 0;
+uint32_t nextEntryID = 0;
 bool logActive = false;
 
 
@@ -130,7 +132,7 @@ void writeLog(uint16_t event_number, int parameter_value) {
           We assume that the logger is high priority
           And no other thread will change any of the values !!!!!!
   ******************************/
-  boolean isLogValid = true;
+  bool isLogValid = true;
   sst.flashReadInit(findAddressOfEntryN(nextEntryID));
   if (sst.flashReadNextInt32() != nextEntryID) isLogValid = false;
   if (sst.flashReadNextInt32() != timenow) isLogValid = false;
@@ -188,7 +190,6 @@ uint32_t printLogN(Print* output, uint32_t entryN) {
   chSemSignal(&lockTimeCriticalZone2);
   return entryN;
 }
-
 
 void Last_Log_To_SPI_buff(byte* buff) {
   chSemWait(&lockTimeCriticalZone2);
@@ -436,29 +437,23 @@ void checkNextID(Print* output) {
   output->println(F("Done"));
 }
 
-#ifdef LOG_INTERVAL
-
-#ifdef DEBUG_LOGS
-THD_WORKING_AREA( waThreadLogger, 128) ;
-#else
-THD_WORKING_AREA( waThreadLogger, 64 );
+void printLoggerHelp(Print* output) {
+  output->println(F("Logger help"));
+#ifdef DEBUG_MEMORY
+  output->println(F("(lc) Check"));
+  output->println(F("(ld) Debug"));
+  output->println(F("(ln) Set nextID"));
 #endif
+  output->println(F("(lf) Format"));
+  output->println(F("(li) Info"));
+  output->println(F("(ll) Current log"));
+  output->println(F("(lm) Multiple log"));
+  output->println(F("(lr) Read (start record)"));
+  output->println(F("(lt) Test"));
 
-THD_FUNCTION( ThreadLogger, arg ) {
-  chThdSleep(5000);
-  writeLog(EVENT_ARDUINO_BOOT, 0);
-  while (TRUE) {
-    //avoids logging during the second x+1, ensure x+LOG_INTERVAL
-    //because epoch is only precise to the second so the logging is evenly spaced
-    chThdSleep(LOG_INTERVAL * 1000 - millis() % 1000 + 100);
-    writeLog(0, 0);
-  }
 }
 
-#endif
-
-
-void processLoggerCommandSST(char command, char* data, Print* output) {
+void processLoggerCommand(char command, char* data, Print* output) {
   switch (command) {
 #ifdef DEBUG_MEMORY
     case 'c':
@@ -531,26 +526,8 @@ void processLoggerCommandSST(char command, char* data, Print* output) {
       }
       break;
     default:
-      printLoggerHelpSST(output);
+      printLoggerHelp(output);
   }
-
-}
-
-
-
-void printLoggerHelpSST(Print* output) {
-  output->println(F("Logger help"));
-#ifdef DEBUG_MEMORY
-  output->println(F("(lc) Check"));
-  output->println(F("(ld) Debug"));
-  output->println(F("(ln) Set nextID"));
-#endif
-  output->println(F("(lf) Format"));
-  output->println(F("(li) Info"));
-  output->println(F("(ll) Current log"));
-  output->println(F("(lm) Multiple log"));
-  output->println(F("(lr) Read (start record)"));
-  output->println(F("(lt) Test"));
 
 }
 
@@ -579,5 +556,7 @@ void dumpLoggerFlash(Print* output, uint32_t fromAddress, uint32_t toAddress) {
   }
   sst.flashReadFinish();
 }
+
+#endif
 
 #endif

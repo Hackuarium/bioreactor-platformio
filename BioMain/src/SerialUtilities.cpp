@@ -17,7 +17,7 @@ void printUtilitiesHelp(Print* output) {
   output->println(F("(uz) eeprom"));
 }
 
-static void printFreeMemory(Print* output) {
+void printFreeMemory(Print* output) {
   chPrintUnusedStack(output);
 }
 

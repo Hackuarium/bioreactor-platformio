@@ -11,10 +11,11 @@
 
 #ifdef THR_EEPROM_LOGGER
   #include "EEPROMLogger.h"
+  #define EVENT_LOGGING 1
 #endif
 
-extern const int PARAM_ERROR;
-extern const uint8_t EVENT_SAVE_ALL_PARAMETER;
+//extern const int PARAM_ERROR;
+//extern const uint8_t EVENT_SAVE_ALL_PARAMETER;
 int parameters[MAX_PARAM];
 
 bool getParameterBit(byte number, byte bitToRead) {

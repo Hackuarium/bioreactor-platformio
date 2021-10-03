@@ -5,5 +5,5 @@
 void resetParameters();
 
 void printUtilitiesHelp( Print* );
-static void printFreeMemory( Print* );
+void printFreeMemory( Print* );
 void processUtilitiesCommand( char, char*, Print* );

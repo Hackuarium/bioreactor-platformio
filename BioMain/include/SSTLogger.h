@@ -5,51 +5,14 @@
   The thread write the logs at a definite fixed interval of time in the SST25VF064 chip
   The time synchronization works through the NTP protocol and our server
 ******************************************************************************************/
-
+#include "BioParams.h"
 #ifdef THR_SST_LOGGER
 
-#include "SST.h"
 #include <Arduino.h>
 
-void printLoggerHelpSST( Print* );
+#include "SST.h"
 
-/******************************************
-   DEFINE FLASH VERSION (default is SST64)
- *****************************************/
-//  THIS SHOULD BE AUTOMATIC !!!
-//support SST25VF064C, SST26VF064B (64Mbits) or similar from Cypress
-#define SST64 1
-//support SST25VF032C, SST26VF032B (32Mbits) or similar from Cypress
-//#define SST32 1
-
-#if defined(SST64) || defined(SST32)
-
-
-
-//Types of logs
-#define ENTRY_SIZE_LINEAR_LOGS     64
-#define SIZE_TIMESTAMPS            4
-#define SIZE_COUNTER_ENTRY         4
-
-// Definition of the log sectors in the flash for the logs
-#if defined(SST64) //64Mbits
-#define ADDRESS_MAX   0x800000 // http://www.sst.com/dotAsset/40498.pdf&usd=2&usg=ALhdy294tEkn4s_aKwurdSetYTt_vmXQhw
-#elif defined(SST32) //32Mbits
-#define ADDRESS_MAX   0X400000
-#endif
-
-// #define ADDRESS_MAX   0X001000 // if we don't want to use all memory !!!!
-
-
-#define ADDRESS_BEG   0x000000
-#define ADDRESS_LAST  (ADDRESS_MAX - ENTRY_SIZE_LINEAR_LOGS)
-#define SECTOR_SIZE       4096
-#define NB_ENTRIES_PER_SECTOR    (SECTOR_SIZE  / ENTRY_SIZE_LINEAR_LOGS)
-#define ADDRESS_SIZE  (ADDRESS_MAX  - ADDRESS_BEG)
-// The number of entires by types of logs (seconds, minutes, hours, commands/events)
-#define MAX_NB_ENTRIES    (ADDRESS_SIZE  / ENTRY_SIZE_LINEAR_LOGS)
-
-#define MAX_MULTI_LOG 64 // Allows to display long log on serial
+extern uint32_t nextEntryID;
 
 uint32_t findAddressOfEntryN( uint32_t );
 
@@ -110,22 +73,8 @@ void debugFlash( Print* );
 */
 void checkNextID( Print* );
 
-#ifdef LOG_INTERVAL
-
-#ifdef DEBUG_LOGS
-THD_WORKING_AREA(waThreadLogger, 128);
-#else
-THD_WORKING_AREA(waThreadLogger, 64);
-#endif
-
-THD_FUNCTION(ThreadLogger, arg);
-
-#endif
-
-
-void processLoggerCommandSST( char, char*, Print* );
-void printLoggerHelpSST( Print* );
+void processLoggerCommand( char, char*, Print* );
+void printLoggerHelp( Print* );
 void dumpLoggerFlash( Print*, uint32_t, uint32_t);
 
-#endif
 #endif

@@ -9,21 +9,14 @@
 #include <Arduino.h>
 #include <ChNil.h>
 
+#ifdef THR_EEPROM_LOGGER
+
 #include "BioParams.h"
 #include "Params.h"
-
-
-const byte LOG_ENTRY_LENGTH = ( NB_PARAMETERS_LINEAR_LOGS + 2 ) * 2;
-const byte NUMBER_LOGS = 960/LOG_ENTRY_LENGTH;
-
-#define FIRST_ADDRESS   64
-#define LAST_ADDRESS   1023
 
 unsigned long lastLog = millis();
 uint16_t eepromLoggerID = 0;
 uint16_t eepromLoggerTimeBetween = 0;
-
-extern const uint8_t LOG_INTERVAL;
 
 int getFirstAddress(uint16_t entryID) {
   return FIRST_ADDRESS + LOG_ENTRY_LENGTH * (entryID % NUMBER_LOGS);
@@ -151,3 +144,5 @@ void processLoggerCommandEEPROM(char command, char* data, Print* output) {
       printLoggerHelpEEPROM(output);
   }
 }
+
+#endif

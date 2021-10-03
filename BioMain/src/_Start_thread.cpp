@@ -14,6 +14,14 @@ there are not too many activities on the microcontroler
   #include "Monitoring.h"
 #endif
 
+#ifdef THR_SST_LOGGER
+  #include "SSTThread.h"
+#endif
+
+#ifdef THR_SERIAL
+  #include "SerialThread.h"
+#endif
+
 /*******************************************************************************
                           NilRTOS Multithreading Table
       The higher in the Table The higher the priority
@@ -21,11 +29,12 @@ there are not too many activities on the microcontroler
 THD_TABLE_BEGIN
 
 // logger should have priority to prevent any corruption of flash memory
-/*
+
 #ifdef THR_SST_LOGGER
-#include "sstLogger.h"
-NIL_THREADS_TABLE_ENTRY(NULL, ThreadLogger, NULL, waThreadLogger, sizeof(waThreadLogger))
+  THD_TABLE_ENTRY(waThreadLogger, NULL, ThreadLogger, NULL)
 #endif
+
+/*
 
 #ifdef THR_STEPPER
 #include "Stepper.h"
@@ -59,12 +68,13 @@ NIL_THREADS_TABLE_ENTRY(NULL, ThreadOutputs, NULL, waThreadOutputs, sizeof(waThr
 #include "Steps.h"
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadSteps, NULL, waThreadSteps, sizeof(waThreadSteps))
 #endif
+*/
 
 #ifdef THR_SERIAL
-#include "serial.h"
-NIL_THREADS_TABLE_ENTRY(NULL, ThreadSerial, NULL, waThreadSerial, sizeof(waThreadSerial))
+THD_TABLE_ENTRY(waThreadSerial, NULL, ThreadSerial, NULL)
 #endif
 
+/*
 #ifdef THR_ERROR
 #include "Error.h"
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadError, NULL, waThreadError, sizeof(waThreadError))  
@@ -72,7 +82,6 @@ NIL_THREADS_TABLE_ENTRY(NULL, ThreadError, NULL, waThreadError, sizeof(waThreadE
 
 */
 #ifdef THR_MONITORING
-//THD_TABLE_ENTRY(NULL, ThreadMonitoring, NULL, waThreadMonitoring, sizeof(waThreadMonitoring))
 THD_TABLE_ENTRY(waThreadMonitoring, NULL, ThreadMonitoring, NULL)
 #endif
 
