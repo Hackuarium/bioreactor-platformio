@@ -14,7 +14,7 @@
 #ifndef SST_h
 #define SST_h
 
-#include "Arduino.h"
+#include <Arduino.h>
 
 class SST
 {

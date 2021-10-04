@@ -34,6 +34,10 @@ there are not too many activities on the microcontroler
   #include "ErrorThread.h"
 #endif
 
+#ifdef THR_PID
+  #include "BioPIDThread.h"
+#endif
+
 /*******************************************************************************
                           NilRTOS Multithreading Table
       The higher in the Table The higher the priority
@@ -61,7 +65,7 @@ NIL_THREADS_TABLE_ENTRY(NULL, ThreadWeight, NULL, waThreadWeight, sizeof(waThrea
 #ifdef THR_ONEWIRE
   THD_TABLE_ENTRY(waThreadOneWire, NULL, ThreadOneWire, NULL)
   #ifdef THR_PID
-  NIL_THREADS_TABLE_ENTRY(NULL, ThreadPID, NULL, waThreadPID, sizeof(waThreadPID))  
+  THD_TABLE_ENTRY(waThreadPID, NULL, ThreadPID, NULL)
   #endif  
   #ifdef THR_FAN
   THD_TABLE_ENTRY(waThreadFan, NULL, ThreadFan, NULL)
