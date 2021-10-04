@@ -23,8 +23,8 @@
 #define THR_SERIAL      1
 #define THR_ONEWIRE     1
 // #define THR_PID         1
-// #define THR_FAN         1
-// #define THR_ERROR       1
+#define THR_FAN         1
+#define THR_ERROR       1
 // #define THR_STEPPER     1
 // #define THR_STEPS       1
 // #define THR_WEIGHT      1
@@ -72,6 +72,9 @@
 
 // FAN Thread
 #define OUT_FAN            11
+#define TEMP_FAN_ON        3500
+
+// ERROR Thread
 #define OUT_ERROR          A4
 
 // Weght Thread
