@@ -4,6 +4,7 @@
 #include "BioParams.h"
 #include "SSTLogger.h"
 #include "BioOneWire.h"
+#include "Weight.h"
 
 #if FLASH_SELECT == 10 //Flash SS_SPI
 SST sst = SST('B', 6); //D10 is PORT B - 6
