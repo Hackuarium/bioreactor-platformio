@@ -31,7 +31,7 @@
 // #define THR_OUTPUTS     1
 #define THR_MONITORING  1
 
-#define MONITORING_LED  13
+
 
 #define NB_PARAMETERS_LINEAR_LOGS  26
 
@@ -57,31 +57,37 @@
 //When parameters are set (and saved) an event is recorded (256-281 : A-Z + .... (if more parameters than 262 ...)
 #define EVENT_PARAMETER_SET          256
 
+// MONITORING Thread
+#define MONITORING_LED  13
 
-
-
+// STEPPER Thread
 #define STEPPER_DIRECTION  8
 #define STEPPER_STEP       9
 
+// OUTPUT Thread
 #define OUT_1              10
 #define OUT_2              5
 #define OUT_3              A6
 #define OUT_4              12
 
+// FAN Thread
 #define OUT_FAN            11
 #define OUT_ERROR          A4
 
+// Weght Thread
 #define WEIGHT_DATA        A1
 #define WEIGHT_CLK         A0     //need to redefine the calibration parameters and process (see "HX711")
 
-
+// ONE WIRE Thread
 #define TEMP_EXT1          7
 #define TEMP_EXT2          A5
 #define TEMP_PCB           A2
+
+// PID Thread
 #define PID_CONTROL        6
 
-
-//#define EVENT_LOGGING  1
+// EEPROM || SST Thread
+#define EVENT_LOGGING  1
 
 /******************************
   SERIAL, LOGGER AND DEBUGGERS
@@ -204,4 +210,3 @@
 
 #define FIRST_ADDRESS   64
 #define LAST_ADDRESS   1023
-

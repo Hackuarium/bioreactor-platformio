@@ -11,7 +11,6 @@
 
 #ifdef THR_EEPROM_LOGGER
   #include "EEPROMLogger.h"
-  #define EVENT_LOGGING 1
 #endif
 
 //extern const int PARAM_ERROR;
@@ -59,9 +58,13 @@ void saveParameters() {
   for (byte i = 0; i < MAX_PARAM; i++) {
     eeprom_write_word((uint16_t*) EE_START_PARAM + i, parameters[i]);
   }
-    #ifdef EVENT_LOGGING
- writeLog(EVENT_SAVE_ALL_PARAMETER, 0);
-#endif
+  #ifdef EVENT_LOGGING
+    #ifdef THR_EEPROM_LOGGER
+    writeLog();
+    #else
+    writeLog(EVENT_SAVE_ALL_PARAMETER, 0);
+    #endif
+  #endif
 }
 
 /*
@@ -73,24 +76,36 @@ void setAndSaveParameter(byte number, int value) {
   //The address of the parameter is given by : EE_START_PARAM+number*2
   eeprom_write_word((uint16_t*) EE_START_PARAM + number, value);
   #ifdef EVENT_LOGGING
-  writeLog(EVENT_PARAMETER_SET + number, value);
-#endif
+    #ifdef THR_EEPROM_LOGGER
+    writeLog();
+    #else
+    writeLog(EVENT_PARAMETER_SET + number, value);
+    #endif
+  #endif
 }
 
 // this method will check if there was a change in the error status and log it in this case
 bool saveAndLogError(boolean isError, byte errorFlag) {
   if (isError) {
     if (setParameterBit(PARAM_ERROR, errorFlag)) { // the status has changed
-#ifdef EVENT_LOGGING
-      writeLog(EVENT_ERROR_FAILED, errorFlag);
-#endif
+      #ifdef EVENT_LOGGING
+        #ifdef THR_EEPROM_LOGGER
+        writeLog();
+        #else
+        writeLog(EVENT_ERROR_FAILED, errorFlag);
+        #endif
+      #endif
       return true;
     }
   } else {
     if (clearParameterBit(PARAM_ERROR, errorFlag)) { // the status has changed
-#ifdef EVENT_LOGGING
-      writeLog(EVENT_ERROR_RECOVER, errorFlag);
-#endif
+      #ifdef EVENT_LOGGING
+      #ifdef THR_EEPROM_LOGGER
+        writeLog();
+        #else
+        writeLog(EVENT_ERROR_RECOVER, errorFlag);
+        #endif
+      #endif
       return true;
     }
   }
