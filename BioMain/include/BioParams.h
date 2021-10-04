@@ -26,7 +26,7 @@
 #define THR_FAN         1
 #define THR_ERROR       1
 #define THR_STEPPER     1
-// #define THR_STEPS       1
+#define THR_STEPS       1
 // #define THR_WEIGHT      1
 // #define THR_OUTPUTS     1
 #define THR_MONITORING  1
