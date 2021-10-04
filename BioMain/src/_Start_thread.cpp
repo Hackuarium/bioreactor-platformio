@@ -38,6 +38,10 @@ there are not too many activities on the microcontroler
   #include "BioPIDThread.h"
 #endif
 
+#ifdef THR_STEPPER
+  #include "BioStepperThread.h"
+#endif
+
 /*******************************************************************************
                           NilRTOS Multithreading Table
       The higher in the Table The higher the priority
@@ -50,13 +54,11 @@ THD_TABLE_BEGIN
   THD_TABLE_ENTRY(waThreadLogger, NULL, ThreadLogger, NULL)
 #endif
 
-/*
-
 #ifdef THR_STEPPER
-#include "Stepper.h"
-NIL_THREADS_TABLE_ENTRY(NULL, ThreadStepper, NULL, waThreadStepper, sizeof(waThreadStepper))
+THD_TABLE_ENTRY(waThreadStepper, NULL, ThreadStepper, NULL)
 #endif
 
+/*
 #ifdef THR_WEIGHT
 #include "Weight.h"
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadWeight, NULL, waThreadWeight, sizeof(waThreadWeight))
