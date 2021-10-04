@@ -16,5 +16,5 @@
 #include "SSTLogger.h"
 //#include "WireSlaveCh.h"
 //#include "WireMasterCh.h"
-//#include "SerialUtilities.h"
+#include "SerialUtilities.h"
 #include "Serial.h"
