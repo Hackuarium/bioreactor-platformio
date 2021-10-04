@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-void oneWireInfo(Print* output);
+//void oneWireInfo(Print* output);
 
 void processSpecificCommand( char*, char*, Print* );
 void printSpecificHelp( Print* );

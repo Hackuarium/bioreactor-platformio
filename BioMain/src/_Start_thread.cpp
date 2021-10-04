@@ -22,6 +22,10 @@ there are not too many activities on the microcontroler
   #include "SerialThread.h"
 #endif
 
+#ifdef THR_ONEWIRE
+  #include "BioOneWireThread.h"
+#endif
+
 /*******************************************************************************
                           NilRTOS Multithreading Table
       The higher in the Table The higher the priority
@@ -45,12 +49,9 @@ NIL_THREADS_TABLE_ENTRY(NULL, ThreadStepper, NULL, waThreadStepper, sizeof(waThr
 #include "Weight.h"
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadWeight, NULL, waThreadWeight, sizeof(waThreadWeight))
 #endif
-
+*/
 #ifdef THR_ONEWIRE
-#include "OneWire2.h"
-#include "PID.h"
-#include "Fan.h"
-  NIL_THREADS_TABLE_ENTRY(NULL, ThreadOneWire, NULL, waThreadOneWire, sizeof(waThreadOneWire))  
+  THD_TABLE_ENTRY(waThreadOneWire, NULL, ThreadOneWire, NULL)
   #ifdef THR_PID
   NIL_THREADS_TABLE_ENTRY(NULL, ThreadPID, NULL, waThreadPID, sizeof(waThreadPID))  
   #endif  
@@ -68,7 +69,6 @@ NIL_THREADS_TABLE_ENTRY(NULL, ThreadOutputs, NULL, waThreadOutputs, sizeof(waThr
 #include "Steps.h"
 NIL_THREADS_TABLE_ENTRY(NULL, ThreadSteps, NULL, waThreadSteps, sizeof(waThreadSteps))
 #endif
-*/
 
 #ifdef THR_SERIAL
 THD_TABLE_ENTRY(waThreadSerial, NULL, ThreadSerial, NULL)

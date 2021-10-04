@@ -21,7 +21,7 @@
 // #define THR_WIRE_MASTER 1
 #define THR_SST_LOGGER  1
 #define THR_SERIAL      1
-// #define THR_ONEWIRE     1
+#define THR_ONEWIRE     1
 // #define THR_PID         1
 // #define THR_FAN         1
 // #define THR_ERROR       1
