@@ -50,6 +50,10 @@ there are not too many activities on the microcontroler
   #include "BioWeightThread.h"
 #endif
 
+#ifdef THR_OUTPUTS
+  #include "BioOutputsThread.h"
+#endif
+
 /*******************************************************************************
                           NilRTOS Multithreading Table
       The higher in the Table The higher the priority
@@ -81,8 +85,7 @@ THD_TABLE_ENTRY(waThreadWeight, NULL, ThreadWeight, NULL)
 #endif
 
 #ifdef THR_OUTPUTS
-#include "Outputs.h"
-NIL_THREADS_TABLE_ENTRY(NULL, ThreadOutputs, NULL, waThreadOutputs, sizeof(waThreadOutputs))
+THD_TABLE_ENTRY(waThreadOutputs, NULL, ThreadOutputs, NULL)
 #endif
 
 #ifdef THR_STEPS
