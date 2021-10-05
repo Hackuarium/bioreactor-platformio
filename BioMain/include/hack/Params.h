@@ -8,25 +8,25 @@
 extern int parameters[MAX_PARAM];
 
 //uint16_t getQualifier();
-bool setParameterBit( byte number, byte bitToSet );
-bool clearParameterBit( byte number, byte bitToClear );
+bool setParameterBit( uint8_t number, uint8_t bitToSet );
+bool clearParameterBit( uint8_t number, uint8_t bitToClear );
 //void writeLog( uint16_t event_number, int parameter_value );
 
-void toggleParameterBit( byte, byte );
+void toggleParameterBit( uint8_t, uint8_t );
 void setupParameters();
-void setParameter( byte, int );
-void incrementParameter( byte );
+void setParameter( uint8_t, int );
+void incrementParameter( uint8_t );
 void saveParameters();
-void setAndSaveParameter( byte, int );
-void printParameter( Print*, byte );
+void setAndSaveParameter( uint8_t, int );
+void printParameter( Print*, uint8_t );
 void printParameters( Print* );
 
-bool getParameterBit( byte, byte );
-bool setParameterBit( byte, byte );
-bool clearParameterBit( byte, byte );
-bool saveAndLogError( boolean, byte );
+bool getParameterBit( uint8_t, uint8_t );
+bool setParameterBit( uint8_t, uint8_t );
+bool clearParameterBit( uint8_t, uint8_t );
+bool saveAndLogError( bool, uint8_t );
 
-uint8_t printCompactParameters( Print*, byte );
+uint8_t printCompactParameters( Print*, uint8_t );
 uint8_t printCompactParameters( Print* );
 
-int getParameter( byte );
+int getParameter( uint8_t );

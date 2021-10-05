@@ -20,8 +20,8 @@ uint16_t getFirstLogEntryID();
 uint16_t getNextLogEntryID();
 void printLog(Print* );
 
-void printLoggerHelpEEPROM( Print * );
-void processLoggerCommandEEPROM( char, char*, Print* );
+void printLoggerHelp( Print * );
+void processLoggerCommand( char, char*, Print* );
 
 THD_WORKING_AREA( waThreadLogger, 20 );
 THD_FUNCTION( ThreadLogger, arg );

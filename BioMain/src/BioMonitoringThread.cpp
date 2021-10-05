@@ -11,9 +11,11 @@ the microcontroler
 
 #include "BioParams.h"
 
+#ifdef THR_MONITORING
+
 THD_FUNCTION( ThreadMonitoring, arg ) {
-//  chThdSleep(8000); //Do not start the watchdog too quickly
-//  wdt_enable(WDTO_8S);  //activate the watchdog
+  chThdSleep(8000); //Do not start the watchdog too quickly
+  wdt_enable(WDTO_8S);  //activate the watchdog
   #ifdef MONITORING_LED
   pinMode(MONITORING_LED, OUTPUT); //diode pin out   
   #endif
@@ -26,6 +28,8 @@ THD_FUNCTION( ThreadMonitoring, arg ) {
     digitalWrite(MONITORING_LED,LOW);
     chThdSleep(500);
     #endif
-//    wdt_reset();//resed avoid the automatic reboot
+    wdt_reset();//resed avoid the automatic reboot
   }
 }
+
+#endif

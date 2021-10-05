@@ -111,14 +111,14 @@ THD_FUNCTION ( ThreadLogger, arg ) {
   }
 }
 
-void printLoggerHelpEEPROM( Print * output) {
+void printLoggerHelp( Print * output) {
   output->println(F("Logger help"));
   output->println(F("(ld) Dump"));
   output->println(F("(lf) Format"));
   output->println(F("(lw) Write log"));
 }
 
-void processLoggerCommandEEPROM(char command, char* data, Print* output) {
+void processLoggerCommand(char command, char* data, Print* output) {
   switch (command) {
     case 'd':
       printLog(output);
@@ -141,7 +141,7 @@ void processLoggerCommandEEPROM(char command, char* data, Print* output) {
       output->println(F("Log written"));
       break;
     default:
-      printLoggerHelpEEPROM(output);
+      printLoggerHelp(output);
   }
 }
 

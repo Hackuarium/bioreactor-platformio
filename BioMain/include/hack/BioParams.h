@@ -125,8 +125,8 @@
 #define PARAM_CURRENT_STEP           22
 #define PARAM_CURRENT_WAIT_TIME      23
 // 36-51 is used by the 16 allowed step
-#define FIRST_STEP_PARAMETER         52 // AI
-#define LAST_STEP_PARAMETER          67
+#define FIRST_STEP_PARAMETER         52 // BA
+#define LAST_STEP_PARAMETER          67 // BP
 #define NB_STEP_PARAMETERS          LAST_STEP_PARAMETER - FIRST_STEP_PARAMETER + 1
 
 
