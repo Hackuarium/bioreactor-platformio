@@ -4,6 +4,9 @@
 #include "BioParams.h"
 #include "Params.h"
 
+// setting ATmega32U4 as I2C slave.
+#ifdef THR_WIRE_SLAVE
+
 // #define WIRE_MASTER_HOT_PLUG 1  // scan for new devices preventing sleep mode
 // of I2C slaves
 
@@ -209,3 +212,5 @@ void processWireCommand(char command, char *paramValue,
     printWireHelp(output);
   }
 }
+
+#endif

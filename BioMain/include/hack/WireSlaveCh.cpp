@@ -6,6 +6,9 @@
 #include "BioParams.h"
 #include "Params.h"
 
+// setting ATmega32U4 as I2C slave.
+#ifdef THR_WIRE_SLAVE
+
 uint8_t command = 0x00;
 
 void requestEvent() {
@@ -51,5 +54,7 @@ void startWireSlave() {
   Wire.onReceive(receiveEvent); // register event
   Wire.onRequest(requestEvent); // register event
 }
+
+#endif
 
 #endif
