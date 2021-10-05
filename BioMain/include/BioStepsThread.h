@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <ChNil.h>
 
-#include "BioParams.h"
+#include "hack/BioParams.h"
 
 #ifdef THR_STEPS
 

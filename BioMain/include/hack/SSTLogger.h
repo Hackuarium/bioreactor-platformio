@@ -10,7 +10,8 @@
 
 #include <Arduino.h>
 
-#include "SST.h"
+//#include "SST.h"
+#include "libraries/SST/SST.h"
 
 extern uint32_t nextEntryID;
 

@@ -2,7 +2,7 @@
 #include "Params.h"
 
 void resetParameters() {
-
+/*
   setAndSaveParameter(PARAM_STEPPER_SPEED, 60);
   setAndSaveParameter(PARAM_STEPPER_SECONDS, 30);
   setAndSaveParameter(PARAM_STEPPER_WAIT, 5);
@@ -28,4 +28,5 @@ void resetParameters() {
   setAndSaveParameter(PARAM_STATUS, active);
   setAndSaveParameter(PARAM_ENABLED, active);
   setAndSaveParameter(PARAM_ERROR, 0);
+  */
 }

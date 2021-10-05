@@ -1,7 +1,8 @@
 #include <Arduino.h>
 #include <ChNil.h>
 
-#include <OneWire.h>
+//#include <OneWire.h>
+#include "libraries/onewire/OneWire.h"
 
 #include "BioParams.h"
 #include "Params.h"

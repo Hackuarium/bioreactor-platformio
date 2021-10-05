@@ -1,10 +1,10 @@
-/*// External Libraries
+// External Libraries
 #include <Arduino.h>
 #include <ChNil.h>
 #include <avr/wdt.h>
 
 // Other External Libraries
-#include <TimeLib.h>
+#include "libraries/time/TimeLib.h"
 
 // Libraries
 #include "NullStream.h"
@@ -19,6 +19,3 @@
 #include "SerialUtilities.h"
 #include "Serial.h"
 #include "Status.h"
-*/
-
-#include <hack/Hack.h>

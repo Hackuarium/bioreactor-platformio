@@ -9,7 +9,8 @@
 #include "BioSem.h"
 //SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific zones
 
-#include <HX711.h>
+//#include <HX711.h>
+#include "libraries/HX711/HX711.h"
 
 HX711 scale(WEIGHT_DATA, WEIGHT_CLK);
 

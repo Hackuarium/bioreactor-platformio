@@ -4,14 +4,12 @@
 #define SOFTWARE_VERSION "v0.0.1"
 
 // Import constants
-#include "BioParams.h"
+#include <BioParams.h>
 // Import internal libraries
-#include "BioHack.h"
+#include <BioHack.h>
 
 void checkParameters();
 void initParameters();
-
-//#include "SSTThread.h"
 
 /*********
    SETUP

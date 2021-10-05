@@ -1,4 +1,4 @@
-#include "BioParams.h"
+#include "hack/BioParams.h"
 
 #ifdef THR_SST_LOGGER
 

@@ -1,9 +1,12 @@
+#include <Arduino.h>
+#include <ChNil.h>
+
 #include "BioParams.h"
 
 #ifdef THR_SST_LOGGER
 
-#include <ChNil.h>
-#include "SSTLogger.h"
+//#include "SSTLogger.h"
+#include <hack/SSTLogger.h>
   #ifdef LOG_INTERVAL
 
   THD_FUNCTION( ThreadLogger, arg ) {

@@ -5,7 +5,7 @@
   The thread write the logs at a definite fixed interval of time in the SST25VF064 chip
   The time synchronization works through the NTP protocol and our server
 ******************************************************************************************/
-#include "BioHack.h"
+#include "Hack.h"
 #include "BioParams.h"
 
 #ifdef THR_SST_LOGGER
@@ -13,10 +13,12 @@
 #include <Arduino.h>
 #include <ChNil.h>
 
-#include <SST.h>
+//#include <SST.h>
+#include "libraries/SST/SST.h" 
 #include <SPI.h>
 
-#include <TimeLib.h>
+//#include <TimeLib.h>
+#include "libraries/time/TimeLib.h"
 #include <avr/wdt.h>
 
 

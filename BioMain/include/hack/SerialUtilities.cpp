@@ -1,9 +1,13 @@
 // code taken from https://github.com/Hackuarium/simple-spectro/tree/master/arduino/SimpleSpectro. Allows serial monitoring communication.
 #include <ChNil.h>
 #include <Arduino.h>
-#include <TimeLib.h>
+
+//#include <TimeLib.h>
+#include "libraries/time/TimeLib.h"
 
 #include "BioFunc.h"
+//#include <hack/BioFunc.h>
+//#include <hack/BioFunc.h>
 #include "Params.h"
 #include "EEPROMHack.h"
 

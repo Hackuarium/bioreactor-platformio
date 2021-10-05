@@ -1,6 +1,6 @@
 #include <ChNil.h>
 
-#include "BioOneWire.h"
+#include "hack/BioOneWire.h"
 
 #ifdef THR_ONEWIRE
 

@@ -4,7 +4,7 @@
 
 #ifdef THR_SERIAL
 
-#include "Serial.h"
+#include <hack/Serial.h>
 
 uint8_t serialBufferPositionB = 0;
 char serialBufferB[SERIAL_BUFFER_LENGTH];
