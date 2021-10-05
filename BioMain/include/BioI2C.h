@@ -13,8 +13,6 @@
  - B????????
  */
 
-THD_WORKING_AREA(waThreadWire, 88); //min of 64 when pH present
-THD_FUNCTION(ThreadWire, arg);
 
 /********************
  * Utilities functions 
