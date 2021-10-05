@@ -6,7 +6,8 @@
 
 #ifdef THR_WEIGHT
 
-SEMAPHORE_DECL(lockTimeCriticalZone4, 1); // only one process in some specific zones
+#include "BioSem.h"
+//SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific zones
 
 #include <HX711.h>
 
@@ -32,9 +33,9 @@ int getWeight() { // we can not avoid to have some errors measuring the weight
     while (!scale.is_ready()) {
       chThdSleep(10);
     }
-    chSemWait(&lockTimeCriticalZone4);
+    chSemWait(&lockTimeCriticalZone);
     long currentWeight = scale.read();
-    chSemSignal(&lockTimeCriticalZone4);
+    chSemSignal(&lockTimeCriticalZone);
 
     if ((currentWeight & 0b11111111) != 1) {
       if (weight == 0) {

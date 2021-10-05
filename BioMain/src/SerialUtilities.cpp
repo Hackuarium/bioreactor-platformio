@@ -3,10 +3,9 @@
 #include <Arduino.h>
 #include <TimeLib.h>
 
+#include "BioFunc.h"
 #include "Params.h"
 #include "EEPROMHack.h"
-
-void resetParameters();
 
 void printUtilitiesHelp(Print* output) {
   output->println(F("(uc) Compact settings"));

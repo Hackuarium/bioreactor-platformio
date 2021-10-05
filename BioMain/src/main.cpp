@@ -5,8 +5,6 @@
 
 // Import constants
 #include "BioParams.h"
-// Import Functions
-#include "BioFunc.h"
 // Import internal libraries
 #include "BioHack.h"
 
@@ -27,8 +25,8 @@ void setup() {
 #ifdef FLASH_SELECT
   pinMode(FLASH_SELECT, OUTPUT);
   setupMemory();
-  //recoverLastEntryN();
-  //loadLastEntryToParameters();   //get back the previous config
+  recoverLastEntryN();
+  loadLastEntryToParameters();   //get back the previous config
 #endif
 
   chBegin();

@@ -4,7 +4,6 @@
 #include <avr/eeprom.h>
 
 #include "BioParams.h"
-#include "BioFunc.h"
 #include "ToHex.h"
 #include "EEPROMHack.h"
 #include "SSTLogger.h"

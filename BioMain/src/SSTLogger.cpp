@@ -20,8 +20,8 @@
 #include <avr/wdt.h>
 
 
-//#include "Sem.h"
-SEMAPHORE_DECL(lockTimeCriticalZone2, 1); // only one process in some specific zones
+#include "BioSem.h"
+//SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific zones
 
 /******************************************
    DEFINE FLASH VERSION (default is SST64)
@@ -91,7 +91,7 @@ void writeLog(uint16_t event_number, int parameter_value) {
             Slave Select
   ******************************/
 
-  chSemWait(&lockTimeCriticalZone2);
+  chSemWait(&lockTimeCriticalZone);
 
   uint16_t param = 0;
   uint32_t timenow = now();
@@ -157,7 +157,7 @@ void writeLog(uint16_t event_number, int parameter_value) {
   /*****************************
          Out and Deselect
   ******************************/
-  chSemSignal(&lockTimeCriticalZone2);
+  chSemSignal(&lockTimeCriticalZone);
   chThdSleep(5);
 }
 
@@ -176,7 +176,7 @@ uint32_t printLogN(Print* output, uint32_t entryN) {
   if ((nextEntryID > MAX_NB_ENTRIES) && (entryN < (nextEntryID - MAX_NB_ENTRIES + NB_ENTRIES_PER_SECTOR))) {
     entryN = nextEntryID - MAX_NB_ENTRIES + NB_ENTRIES_PER_SECTOR;
   }
-  chSemWait(&lockTimeCriticalZone2);
+  chSemWait(&lockTimeCriticalZone);
   sst.flashReadInit(findAddressOfEntryN(entryN));
   byte checkDigit = 0;
   for (byte i = 0; i < ENTRY_SIZE_LINEAR_LOGS; i++) {
@@ -187,19 +187,19 @@ uint32_t printLogN(Print* output, uint32_t entryN) {
   toHex(output, checkDigit);
   output->println("");
   sst.flashReadFinish();
-  chSemSignal(&lockTimeCriticalZone2);
+  chSemSignal(&lockTimeCriticalZone);
   return entryN;
 }
 
 void Last_Log_To_SPI_buff(byte* buff) {
-  chSemWait(&lockTimeCriticalZone2);
+  chSemWait(&lockTimeCriticalZone);
   sst.flashReadInit(findAddressOfEntryN(nextEntryID - 1));
   for (byte i = 0; i < ENTRY_SIZE_LINEAR_LOGS; i++) {
     byte oneByte = sst.flashReadNextInt8();
     buff[i] = oneByte;
   }
   sst.flashReadFinish();
-  chSemSignal(&lockTimeCriticalZone2);
+  chSemSignal(&lockTimeCriticalZone);
 }
 
 
@@ -296,17 +296,17 @@ void printLastLog(Print* output) {
 }
 
 void formatFlash(Print* output) {
-  chSemWait(&lockTimeCriticalZone2);
+  chSemWait(&lockTimeCriticalZone);
   sst.flashTotalErase();
   output->println(F("OK"));
   nextEntryID = 0;
-  chSemSignal(&lockTimeCriticalZone2);
+  chSemSignal(&lockTimeCriticalZone);
 }
 
 
 void testFlash(Print* output) {
   wdt_disable();
-  chSemWait(&lockTimeCriticalZone2);
+  chSemWait(&lockTimeCriticalZone);
   output->println(F("W/R / validate"));
   output->println(F("You need to format after test lf1234"));
   for (int i = 0; i < ADDRESS_MAX / SECTOR_SIZE; i++) {
@@ -339,13 +339,13 @@ void testFlash(Print* output) {
       }
     }
   }
-  chSemSignal(&lockTimeCriticalZone2);
+  chSemSignal(&lockTimeCriticalZone);
   wdt_enable(WDTO_8S);
   wdt_reset();
 }
 
 void readFlash(Print* output, long firstRecord) {
-  chSemWait(&lockTimeCriticalZone2);
+  chSemWait(&lockTimeCriticalZone);
   output->println(F("Index / Address / ID / Epoch"));
   for (int i = firstRecord; i < ADDRESS_MAX / SECTOR_SIZE; i++) {
     if (i == (firstRecord + 256)) break;
@@ -361,7 +361,7 @@ void readFlash(Print* output, long firstRecord) {
     output->println("");
     sst.flashReadFinish();
   }
-  chSemSignal(&lockTimeCriticalZone2);
+  chSemSignal(&lockTimeCriticalZone);
 }
 
 /*
@@ -370,7 +370,7 @@ void readFlash(Print* output, long firstRecord) {
 
 void debugFlash(Print* output) {
   wdt_disable();
-  chSemWait(&lockTimeCriticalZone2);
+  chSemWait(&lockTimeCriticalZone);
   output->print(F("Debug changes"));
   byte isFF = 2;
   for (long i = 0; i < MAX_NB_ENTRIES; i++) {
@@ -402,7 +402,7 @@ void debugFlash(Print* output) {
   }
   output->println(F(""));
   output->println(F("Done"));
-  chSemSignal(&lockTimeCriticalZone2);
+  chSemSignal(&lockTimeCriticalZone);
   wdt_enable(WDTO_8S);
   wdt_reset();
 }
@@ -412,7 +412,7 @@ void debugFlash(Print* output) {
 */
 void checkNextID(Print* output) {
   wdt_disable();
-  chSemWait(&lockTimeCriticalZone2);
+  chSemWait(&lockTimeCriticalZone);
   output->println(F("Check next ID"));
   // we assume that the ID should always grow linearly. Just
   // after it is not linear, we set the lastEntryID
@@ -431,7 +431,7 @@ void checkNextID(Print* output) {
       output->println(currentID);
     }
   }
-  chSemSignal(&lockTimeCriticalZone2);
+  chSemSignal(&lockTimeCriticalZone);
   wdt_enable(WDTO_8S);
   wdt_reset();
   output->println(F("Done"));

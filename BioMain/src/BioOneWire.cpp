@@ -31,7 +31,8 @@
  *********************************************/
 
 
-SEMAPHORE_DECL(lockTimeCriticalZone3, 1); // only one process in some specific zones
+#include "BioSem.h"
+//SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific zones
 
 #ifdef TEMP_EXT1
 OneWire oneWire1(TEMP_EXT1);
@@ -91,20 +92,20 @@ void getTemperature(OneWire &ow, int parameter, char errorFlag) {
       return;
   }
 
-  chSemWait(&lockTimeCriticalZone3);
+  chSemWait(&lockTimeCriticalZone);
   ow.reset();
   ow.select(addr);
   ow.write(0x44, 1);        // start conversion, with parasite power on at the end
-  chSemSignal(&lockTimeCriticalZone3);
+  chSemSignal(&lockTimeCriticalZone);
 
   chThdSleep(800);     // maybe 750ms is enough, maybe not
   // we might do a ds.depower() here, but the reset will take care of it.
 
-  chSemWait(&lockTimeCriticalZone3);
+  chSemWait(&lockTimeCriticalZone);
   present = ow.reset();
   ow.select(addr);
   ow.write(0xBE);         // Read Scratchpad
-  chSemSignal(&lockTimeCriticalZone3);
+  chSemSignal(&lockTimeCriticalZone);
 
   for (byte i = 0; i < 9; i++) {           // we need 9 bytes
     data[i] = ow.read();
@@ -137,7 +138,7 @@ void getTemperature(OneWire &ow, int parameter, char errorFlag) {
 
 
 void oneWireInfoSS(OneWire &ow, Print* output) { // TODO
-  chSemWait(&lockTimeCriticalZone3);
+  chSemWait(&lockTimeCriticalZone);
   ow.reset_search();
   while (ow.search(oneWireAddress)) {
     for (byte i = 0; i < 8; i++) {
@@ -148,7 +149,7 @@ void oneWireInfoSS(OneWire &ow, Print* output) { // TODO
     output->println("");
     chThdSleep(250);
   }
-  chSemSignal(&lockTimeCriticalZone3);
+  chSemSignal(&lockTimeCriticalZone);
 }
 
 

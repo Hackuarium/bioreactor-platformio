@@ -11,15 +11,15 @@ there are not too many activities on the microcontroler
 #include "BioParams.h"
 
 #ifdef THR_MONITORING
-  #include "Monitoring.h"
+  #include "BioMonitoringThread.h"
 #endif
 
 #ifdef THR_SST_LOGGER
-  #include "SSTThread.h"
+  #include "BioSSTThread.h"
 #endif
 
 #ifdef THR_SERIAL
-  #include "SerialThread.h"
+  #include "BioSerialThread.h"
 #endif
 
 #ifdef THR_ONEWIRE
@@ -27,11 +27,11 @@ there are not too many activities on the microcontroler
 #endif
 
 #ifdef THR_FAN
-  #include "FanThread.h"
+  #include "BioFanThread.h"
 #endif
 
 #ifdef THR_ERROR
-  #include "ErrorThread.h"
+  #include "BioErrorThread.h"
 #endif
 
 #ifdef THR_PID

@@ -2,8 +2,6 @@
 #include <ChNil.h>
 #include <Arduino.h>
 
-void resetParameters();
-
 void printUtilitiesHelp( Print* );
 void printFreeMemory( Print* );
 void processUtilitiesCommand( char, char*, Print* );
