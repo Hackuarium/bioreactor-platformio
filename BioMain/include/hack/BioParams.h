@@ -101,6 +101,7 @@
 #ifdef THR_SST_LOGGER
   #define FLASH_SELECT      1 //Flash SS_SPI
   #define LOG_INTERVAL      10  //Interval in (s) between logs logger
+  #define EVENT_LOGGING  1
 #endif
 
 #define PARAM_STEPPER_SPEED        26   // AA - motor speed, in RPM
