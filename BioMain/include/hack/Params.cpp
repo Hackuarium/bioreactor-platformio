@@ -75,11 +75,7 @@ void setAndSaveParameter(uint8_t number, int value) {
   //The address of the parameter is given by : EE_START_PARAM+number*2
   eeprom_write_word((uint16_t*) EE_START_PARAM + number, value);
   #ifdef EVENT_LOGGING
-    #ifdef THR_EEPROM_LOGGER
-    writeLog();
-    #else
     writeLog(EVENT_PARAMETER_SET + number, value);
-    #endif
   #endif
 }
 
@@ -88,22 +84,14 @@ bool saveAndLogError(boolean isError, uint8_t errorFlag) {
   if (isError) {
     if (setParameterBit(PARAM_ERROR, errorFlag)) { // the status has changed
       #ifdef EVENT_LOGGING
-        #ifdef THR_EEPROM_LOGGER
-        writeLog();
-        #else
         writeLog(EVENT_ERROR_FAILED, errorFlag);
-        #endif
       #endif
       return true;
     }
   } else {
     if (clearParameterBit(PARAM_ERROR, errorFlag)) { // the status has changed
       #ifdef EVENT_LOGGING
-      #ifdef THR_EEPROM_LOGGER
-        writeLog();
-        #else
         writeLog(EVENT_ERROR_RECOVER, errorFlag);
-        #endif
       #endif
       return true;
     }
@@ -152,4 +140,3 @@ uint8_t printCompactParameters(Print* output, uint8_t number) {
 uint8_t printCompactParameters(Print* output) {
   return printCompactParameters(output, MAX_PARAM);
 }
-
