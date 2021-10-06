@@ -4,7 +4,6 @@
 #include <ChNil.h>
 #include "BioParams.h"
 
-
 #ifdef THR_SERIAL
 
 extern char serialBuffer[SERIAL_BUFFER_LENGTH];

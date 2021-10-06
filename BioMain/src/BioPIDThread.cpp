@@ -22,7 +22,7 @@ double heatingRegInput;
 double heatingRegOutput;
 double heatingRegSetpoint;
 //Specify the heating regulation links and initial tuning parameters
-PID heatingRegPID(&heatingRegInput, &heatingRegOutput, &heatingRegSetpoint, 1.0, 0.0002, 5.0, DIRECT);
+PID heatingRegPID(&heatingRegInput, &heatingRegOutput, &heatingRegSetpoint, 1.5, 0.0002, 5.0, DIRECT);
 
 /*Temperature PID Control addressing relay*/
 
