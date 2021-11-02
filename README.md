@@ -23,3 +23,12 @@ void test2() {
   }
 }
 ```
+
+
+# Program bootloader with PlatformIO and USBTinyISP
+
+Go to the platformIO terminal and type:
+
+```bash
+$ pio run -e program_via_USBtinyISP --target bootloader
+```
