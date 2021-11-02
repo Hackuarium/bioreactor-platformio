@@ -104,9 +104,6 @@
   #define EVENT_LOGGING  1
 #endif
 
-#define PARAM_STEPPER_SPEED        26   // AA - motor speed, in RPM
-#define PARAM_STEPPER_SECONDS      27   // AB   number of seconds before changing direction
-#define PARAM_STEPPER_WAIT         28   // AC   wait time in seconds between change of direction
 
 
 #define PARAM_TEMP_EXT1      0   // A - temperature of the solution
@@ -118,10 +115,15 @@
 
 #define PARAM_WEIGHT                  5  // F - in unit of the balance
 #define PARAM_WEIGHT_G                6  // G - in unit of the balance
-#define PARAM_WEIGHT_MIN              7  // I
-#define PARAM_WEIGHT_MAX              8  // J
-#define PARAM_WEIGHT_FACTOR          29  //  - Weight calibration: conversion factor digital -> gr (weight=FACTOR*dig_unit)
-#define PARAM_WEIGHT_OFFSET          30  //  - Weight calibration: digital offset value when bioreactor is empty
+#define PARAM_WEIGHT_SINCE_LAST_EVENT 7  // H - last weight
+#define PARAM_WEIGHT_MIN              8  // I
+#define PARAM_WEIGHT_MAX              9  // J
+
+#define PARAM_STEPPER_SPEED        26   // AA - motor speed, in RPM
+#define PARAM_STEPPER_SECONDS      27   // AB   number of seconds before changing direction
+#define PARAM_STEPPER_WAIT         28   // AC   wait time in seconds between change of direction
+#define PARAM_WEIGHT_FACTOR          29  // AD - Weight calibration: conversion factor digital -> gr (weight=FACTOR*dig_unit)
+#define PARAM_WEIGHT_OFFSET          30  // AE - Weight calibration: digital offset value when bioreactor is empty
 
 #define PARAM_CURRENT_STEP           22
 #define PARAM_CURRENT_WAIT_TIME      23
@@ -129,8 +131,6 @@
 #define FIRST_STEP_PARAMETER         52 // BA
 #define LAST_STEP_PARAMETER          67 // BP
 #define NB_STEP_PARAMETERS          LAST_STEP_PARAMETER - FIRST_STEP_PARAMETER + 1
-
-
 
 
 /******************
