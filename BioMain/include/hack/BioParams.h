@@ -150,8 +150,8 @@
 #define FLAG_WEIGHT_RANGE_ERROR         7   // the weight is outside range
 #define MASK_WEIGHT_ERROR               0b10000000  // where are the bit for weight error
 
-#define PARAM_STATUS             25  // Z - currently active service
-#define PARAM_ENABLED            51  // AZ - enabled service (set by user)
+#define PARAM_ENABLED            25  // Z - enabled service (set by user)
+#define PARAM_STATUS             51  // AZ - currently active service
 
 // the following flags are defined for PARAM_STATUS and PARAM_ENABLED
 #define FLAG_PID_CONTROL         0   //0 to stop PID
