@@ -34,7 +34,8 @@ THD_FUNCTION(ThreadSteps, arg) {
     }
     //int stepValue = getParameter(index + FIRST_STEP_PARAMETER);
     int stepValue = getParameter(PARAM_STATUS);
-    byte parameter = (stepValue & 0b0111100000000000) >> 11;
+    //byte parameter = (stepValue & 0b0111100000000000) >> 11;
+    byte parameter = (stepValue & 0b100000000000) >> 11;
     byte currentMinute = getMinute();
     //int value = stepValue & 0b0000011111111111;
     int value = getParameter(PARAM_CURRENT_WAIT_TIME);
@@ -64,13 +65,15 @@ THD_FUNCTION(ThreadSteps, arg) {
       switch (index) {
         case 0: // Do nothing
           setParameter(PARAM_ENABLED, 0b111111);
-          setParameter(PARAM_STATUS, 0b00000000011);
           index++;
           break;
         case 1: // Wait in minutes
         case 2: // Wait in hours
-          if (waitingTime <= 0 && stepValue > 0) {
-            setParameter(PARAM_CURRENT_WAIT_TIME, value * (parameter == 1 ? 1 : 60));
+          //if (waitingTime <= 0 && stepValue > 0) {
+          if (parameter > 0) {
+            //setParameter(PARAM_CURRENT_WAIT_TIME, value * (parameter == 1 ? 1 : 60));
+            setParameter(PARAM_CURRENT_WAIT_TIME, getParameter(PARAM_CURRENT_WAIT_TIME) * 60);
+            setParameter(PARAM_STATUS, FLAG_WAITING_TIME_HOURS << 0);
           } else {
             if (DEBUG_STEPS) {
               Serial.print(waitingTime);
@@ -90,6 +93,7 @@ THD_FUNCTION(ThreadSteps, arg) {
           }
           break;
         case 3: // Wait for weight reduction to yy grams
+          setParameter(PARAM_STATUS, 0b00010000111);
           if (getParameter(PARAM_WEIGHT_G) <= getParameter(PARAM_WEIGHT_OFFSET)) {
             index++;
           }
