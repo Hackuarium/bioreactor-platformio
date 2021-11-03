@@ -6,7 +6,7 @@
 
 #ifdef THR_STEPS
 
-bool DEBUG_STEPS = false;
+bool DEBUG_STEPS = true;
 
 uint8_t getMinute() {
   return (uint8_t)((millis() % 3600000) / 60000);
