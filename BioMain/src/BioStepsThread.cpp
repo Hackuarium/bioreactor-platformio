@@ -6,7 +6,7 @@
 
 #ifdef THR_STEPS
 
-bool DEBUG_STEPS = true;
+bool DEBUG_STEPS = false;
 
 uint8_t getMinute() {
   return (uint8_t)((millis() % 3600000) / 60000);
@@ -30,12 +30,14 @@ THD_FUNCTION(ThreadSteps, arg) {
     // allows to change the step from the terminal, we reload each time the step
     byte index = getParameter(PARAM_CURRENT_STEP);
     if (index >= NB_STEP_PARAMETERS) {
-      index = 0;
+      index = 20;
     }
-    int stepValue = getParameter(index + FIRST_STEP_PARAMETER);
+    //int stepValue = getParameter(index + FIRST_STEP_PARAMETER);
+    int stepValue = getParameter(PARAM_STATUS);
     byte parameter = (stepValue & 0b0111100000000000) >> 11;
     byte currentMinute = getMinute();
-    int value = stepValue & 0b0000011111111111;
+    //int value = stepValue & 0b0000011111111111;
+    int value = getParameter(PARAM_CURRENT_WAIT_TIME);
     if (DEBUG_STEPS) {
       Serial.print("======> ");
       Serial.println(index);
@@ -48,17 +50,21 @@ THD_FUNCTION(ThreadSteps, arg) {
       Serial.print("V:");
       Serial.println(value);
     }
-    if (stepValue >> 15) { // we set a parameter
+    /*if (stepValue >> 15) { // we set a parameter
       switch (parameter) {
         case 0:
           setParameter(PARAM_TEMP_TARGET, value * 100);
           break;
       }
       index++;
-    } else { // it is an action
+    */
+    //} else { // it is an action
       int waitingTime = getParameter(PARAM_CURRENT_WAIT_TIME);
-      switch (parameter) {
+      //switch (parameter) {
+      switch (index) {
         case 0: // Do nothing
+          setParameter(PARAM_ENABLED, 0b111111);
+          setParameter(PARAM_STATUS, 0b00000000011);
           index++;
           break;
         case 1: // Wait in minutes
@@ -78,23 +84,23 @@ THD_FUNCTION(ThreadSteps, arg) {
               previousMinute = currentMinute;
               setParameter(PARAM_CURRENT_WAIT_TIME, waitingTime);
             }
-            if (waitingTime == 0) {
+            if (waitingTime <= 0) {
               index++;
             }
           }
           break;
         case 3: // Wait for weight reduction to yy grams
-          if (getParameter(PARAM_WEIGHT_G) <= value) {
+          if (getParameter(PARAM_WEIGHT_G) <= getParameter(PARAM_WEIGHT_OFFSET)) {
             index++;
           }
           break;
         case 4: // Wait for weight increase to yy grams
-          if (getParameter(PARAM_WEIGHT_G) >= value) {
+          if (getParameter(PARAM_WEIGHT_G) >= getParameter(PARAM_WEIGHT_MAX)) {
             index++;
           }
           break;
         case 5: // Wait for temperature change (continue if < 0.5°C)
-          if (abs(getParameter(PARAM_TEMP_EXT1) - getParameter(PARAM_TEMP_TARGET)) < value) {
+          if (abs(getParameter(PARAM_TEMP_EXT1) - getParameter(PARAM_TEMP_TARGET)) < 50) {
             index++;
           }
           break;
@@ -105,7 +111,7 @@ THD_FUNCTION(ThreadSteps, arg) {
         default:
           index++;
       }
-    }
+    //}
     setParameter(PARAM_CURRENT_STEP, index);
     chThdSleep(1000);
   }

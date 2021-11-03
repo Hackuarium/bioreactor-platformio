@@ -49,7 +49,7 @@ void processSpecificCommand( char* data, char* paramValue, Print* output ) {
     case 't':
       output->print(F("Status: "));
       output->println(getParameter(PARAM_STATUS),BIN);
-      for (byte i = 0; i < 6; i++) {
+      for (byte i = 0; i < 11; i++) {
         output->print(i);
         output->print(": ");
         output->println(getParameterBit(PARAM_STATUS, i));

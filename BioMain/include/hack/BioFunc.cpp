@@ -22,9 +22,11 @@ void resetParameters() {
     setAndSaveParameter(i, 0);
   }
 
-  int active = 1 << FLAG_STEPPER_CONTROL | 1 << FLAG_PID_CONTROL | 1 << FLAG_OUTPUT_1 | 1 << FLAG_OUTPUT_2 | 1 << FLAG_OUTPUT_3 | 1 << FLAG_OUTPUT_4;
+  int active = 1 << FLAG_PID_CONTROL | 1 << FLAG_STEPPER_CONTROL | 1 << FLAG_FOOD_CONTROL | 1 << FLAG_PH_CONTROL | 1 << FLAG_GAS_CONTROL | 1 << FLAG_SEDIMENTATION | 1 << FLAG_RELAY_FILLING | 1 << FLAG_RELAY_EMPTYING | 1 << FLAG_PH_CALIBRATE | 1 << FLAG_RELAY_ACID | 1 << FLAG_RELAY_BASE;
+
+  int enable = 1 << FLAG_PID_CONTROL | 1 << FLAG_STEPPER_CONTROL | 1 << FLAG_OUTPUT_1 | 1 << FLAG_OUTPUT_2 | 1 << FLAG_OUTPUT_3 | 1 << FLAG_OUTPUT_4;
 
   setAndSaveParameter(PARAM_STATUS, active);
-  setAndSaveParameter(PARAM_ENABLED, active);
+  setAndSaveParameter(PARAM_ENABLED, enable);
   setAndSaveParameter(PARAM_ERROR, 0);
 }

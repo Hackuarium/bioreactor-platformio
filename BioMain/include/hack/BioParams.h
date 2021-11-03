@@ -161,6 +161,18 @@
 #define FLAG_OUTPUT_3            4
 #define FLAG_OUTPUT_4            5
 
+// PARAM_STATUS
+#define FLAG_FOOD_CONTROL         2
+#define FLAG_PH_CONTROL           3
+#define FLAG_GAS_CONTROL          4
+#define FLAG_SEDIMENTATION        5
+#define FLAG_RELAY_FILLING        6
+#define FLAG_RELAY_EMPTYING       7
+#define FLAG_PH_CALIBRATE         8
+#define FLAG_RELAY_ACID           9
+#define FLAG_RELAY_BASE           10
+
+
 // value that should not be taken into account
 // in case of error the parameter is set to this value
 #define ERROR_VALUE  -32768
