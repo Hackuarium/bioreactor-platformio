@@ -122,7 +122,7 @@ THD_FUNCTION(ThreadSteps, arg) {
           }
           break;
         case 5: // Wait for temperature change (continue if < 0.5°C)
-          if (abs( (getParameter(PARAM_TEMP_EXT1) + getParameter(PARAM_TEMP_EXT2) / 2 ) - getParameter(PARAM_TEMP_TARGET)) < 50) {
+          if (abs( ( getParameter(PARAM_TEMP_EXT1) + getParameter(PARAM_TEMP_EXT2) ) / 2 - getParameter(PARAM_TEMP_TARGET)) < 50) {
             previousMinute = getMinute();
             index++;
           }
@@ -136,7 +136,8 @@ THD_FUNCTION(ThreadSteps, arg) {
           }
           if (filledTime <= 0) {
             setStatus = 0b0000000000000000;
-            setStatus |= ( (1 << FLAG_PID_CONTROL) | ~(1 << FLAG_STEPPER_CONTROL) );
+            setStatus &= ~(1 << FLAG_STEPPER_CONTROL);
+            setStatus |= (1 << FLAG_PID_CONTROL);
             setParameter(PARAM_STATUS, setStatus );
             previousMinute = getMinute();
             index++;
@@ -156,7 +157,8 @@ THD_FUNCTION(ThreadSteps, arg) {
         // Empty
         case 8:
           setStatus = 0b0000000000000000;
-          setStatus |= ( ~(1 << FLAG_PID_CONTROL) | ~(1 << FLAG_STEPPER_CONTROL) | (1 << FLAG_FOOD_CONTROL) | (1 << FLAG_RELAY_EMPTYING) );
+          setStatus &= ~(1 << FLAG_PID_CONTROL) &  ~(1 << FLAG_STEPPER_CONTROL);
+          setStatus |= (1 << FLAG_FOOD_CONTROL) | (1 << FLAG_RELAY_EMPTYING);
           setParameter(PARAM_STATUS, setStatus);
           if (getParameter(PARAM_WEIGHT) <= getParameter(PARAM_WEIGHT_MIN)) { // No completely empty
             setStatus ^= (1 << FLAG_RELAY_EMPTYING);

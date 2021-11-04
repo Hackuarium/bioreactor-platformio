@@ -12,7 +12,7 @@
 #ifdef THR_ONEWIRE
 
 #define SAFETY_MAX_PCB_TEMP 7000  // pcb temperature is max 70°C
-#define SAFETY_MIN_PCB_TEMP 1000  // pcb temperatire is min 10°C
+#define SAFETY_MIN_PCB_TEMP 1000  // pcb temperature is min 10°C
 #define SAFETY_MAX_LIQ_TEMP 6000  // liquid temperature is max 60°C
 #define SAFETY_MIN_LIQ_TEMP 1000  // liquid temperature is min 10°C
 
