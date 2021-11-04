@@ -25,6 +25,7 @@ THD_FUNCTION(ThreadSteps, arg) {
 
   // TODO know when the minute starts so that the minute does not change after couple of seconds
   byte previousMinute = getMinute();
+  uint16_t setStatus = 0b0000000000000000;
 
   while (true) {
     // allows to change the step from the terminal, we reload each time the step
@@ -61,16 +62,19 @@ THD_FUNCTION(ThreadSteps, arg) {
     */
     //} else { // it is an action
       int waitingTime = getParameter(PARAM_CURRENT_WAIT_TIME);
+      int sedimentationTime = getParameter(PARAM_SEDIMENTATION_TIME);
+      int filledTime = getParameter(PARAM_FILLED_TIME);
       //switch (parameter) {
       switch (index) {
         case 0: // Do nothing
           setParameter(PARAM_ENABLED, 0b000000);
-          //setParameter(PARAM_STATUS, 0b000000000000);
+          setParameter(PARAM_STATUS, 0b000000000000);
           //index++;
           index = 20;
           break;
         case 1: // Wait in minutes
           setParameter(PARAM_ENABLED, 0b111111);
+          previousMinute = getMinute();
           index++;
         case 2: // Wait in hours
           //if (waitingTime <= 0 && stepValue > 0) {
@@ -98,33 +102,72 @@ THD_FUNCTION(ThreadSteps, arg) {
           break;
         case 3: // Wait for weight reduction to yy grams
           //setParameter(PARAM_STATUS, 0b00010000111);
-          uint16_t setStatus = 0b0000000000000000;
-          setStatus ^= ( (1 << FLAG_PID_CONTROL) | (1 << FLAG_STEPPER_CONTROL) | (1 << FLAG_FOOD_CONTROL) | (1 << FLAG_RELAY_EMPTYING) );
+          setStatus = 0b0000000000000000;
+          setStatus ^= ( (1 << FLAG_FOOD_CONTROL) | (1 << FLAG_RELAY_EMPTYING) );
           setParameter(PARAM_STATUS, setStatus );
-          if (getParameter(PARAM_WEIGHT_G) <= getParameter(PARAM_WEIGHT_OFFSET)) {
+          if (getParameter(PARAM_WEIGHT) >= getParameter(PARAM_WEIGHT_OFFSET)) {  // Completely empty
+            setStatus ^= (1 << FLAG_RELAY_EMPTYING);
+            setParameter(PARAM_STATUS, setStatus );
             index++;
           }
           break;
         case 4: // Wait for weight increase to yy grams
-          setStatus ^= ( (1 << FLAG_FOOD_CONTROL) | (1 << FLAG_RELAY_FILLING) );
+          setStatus = 0b0000000000000000;
+          setStatus ^= ( (1 << FLAG_PID_CONTROL) | (1 << FLAG_STEPPER_CONTROL) | (1 << FLAG_FOOD_CONTROL) | (1 << FLAG_RELAY_FILLING) );
           setParameter(PARAM_STATUS, setStatus );
-          if (getParameter(PARAM_WEIGHT_G) >= getParameter(PARAM_WEIGHT_MAX)) {
+          if (getParameter(PARAM_WEIGHT) <= getParameter(PARAM_WEIGHT_MAX)) {
+            setStatus ^= (1 << FLAG_RELAY_FILLING);
+            setParameter(PARAM_STATUS, setStatus );
             index++;
           }
           break;
         case 5: // Wait for temperature change (continue if < 0.5°C)
           if (abs( (getParameter(PARAM_TEMP_EXT1) + getParameter(PARAM_TEMP_EXT2) / 2 ) - getParameter(PARAM_TEMP_TARGET)) < 50) {
+            previousMinute = getMinute();
             index++;
           }
           break;
+        // Filled
+        case 6:
+          if (currentMinute != previousMinute) {
+            filledTime--;
+            previousMinute = currentMinute;
+            setParameter(PARAM_FILLED_TIME, filledTime);
+          }
+          if (filledTime <= 0) {
+            setStatus = 0b0000000000000000;
+            setStatus |= ( (1 << FLAG_PID_CONTROL) | ~(1 << FLAG_STEPPER_CONTROL) );
+            setParameter(PARAM_STATUS, setStatus );
+            previousMinute = getMinute();
+            index++;
+          }
+          break;
+        // Sedimentation
+        case 7:
+          if (currentMinute != previousMinute) {
+            sedimentationTime--;
+            previousMinute = currentMinute;
+            setParameter(PARAM_SEDIMENTATION_TIME, sedimentationTime);
+          }
+          if (sedimentationTime <= 0) {
+            index++;
+          }
+          break;
+        // Empty
         case 8:
-          setParameter(PARAM_STATUS, stepValue);
-          index++;
+          setStatus = 0b0000000000000000;
+          setStatus |= ( ~(1 << FLAG_PID_CONTROL) | ~(1 << FLAG_STEPPER_CONTROL) | (1 << FLAG_FOOD_CONTROL) | (1 << FLAG_RELAY_EMPTYING) );
+          setParameter(PARAM_STATUS, setStatus);
+          if (getParameter(PARAM_WEIGHT) <= getParameter(PARAM_WEIGHT_MIN)) { // No completely empty
+            setStatus ^= (1 << FLAG_RELAY_EMPTYING);
+            setParameter(PARAM_STATUS, setStatus );
+            index = 0;
+          }
           break;
         case 20:  // Do nothing
         break;
         default:
-          index++;
+          index = 20;
       }
     //}
     setParameter(PARAM_CURRENT_STEP, index);
