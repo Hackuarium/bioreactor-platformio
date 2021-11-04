@@ -64,15 +64,17 @@ THD_FUNCTION(ThreadSteps, arg) {
       //switch (parameter) {
       switch (index) {
         case 0: // Do nothing
-          setParameter(PARAM_ENABLED, 0b111111);
-          index++;
+          setParameter(PARAM_ENABLED, 0b000000);
+          //setParameter(PARAM_STATUS, 0b000000000000);
+          //index++;
           break;
         case 1: // Wait in minutes
+          setParameter(PARAM_ENABLED, 0b111111);
         case 2: // Wait in hours
           //if (waitingTime <= 0 && stepValue > 0) {
           if (parameter > 0) {
             //setParameter(PARAM_CURRENT_WAIT_TIME, value * (parameter == 1 ? 1 : 60));
-            setParameter(PARAM_CURRENT_WAIT_TIME, getParameter(PARAM_CURRENT_WAIT_TIME) * 60);
+            setParameter(PARAM_CURRENT_WAIT_TIME, waitingTime * 60);
             setParameter(PARAM_STATUS, FLAG_WAITING_TIME_HOURS << 0);
           } else {
             if (DEBUG_STEPS) {
@@ -93,7 +95,11 @@ THD_FUNCTION(ThreadSteps, arg) {
           }
           break;
         case 3: // Wait for weight reduction to yy grams
-          setParameter(PARAM_STATUS, 0b00010000111);
+          //setParameter(PARAM_STATUS, 0b00010000111);
+          uint16_t setStatus = 0b0000000000000000;
+          setStatus ^= ( (1 << FLAG_PID_CONTROL) | (1 << FLAG_STEPPER_CONTROL) | (1 << FLAG_FOOD_CONTROL) | (1 << FLAG_RELAY_EMPTYING) );
+          Serial.println(setStatus);
+          setParameter(PARAM_STATUS, setStatus );
           if (getParameter(PARAM_WEIGHT_G) <= getParameter(PARAM_WEIGHT_OFFSET)) {
             index++;
           }
