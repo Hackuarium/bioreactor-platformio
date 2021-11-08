@@ -13,7 +13,7 @@ void resetParameters() {
 
   setAndSaveParameter(PARAM_WEIGHT_MAX, -32768);
   setAndSaveParameter(PARAM_WEIGHT_FACTOR, 0);
-  setAndSaveParameter(PARAM_WEIGHT_OFFSET, 0);
+  setAndSaveParameter(PARAM_WEIGHT_EMPTY, 0);
 
   setAndSaveParameter(PARAM_CURRENT_STEP, 0);
   setAndSaveParameter(PARAM_CURRENT_WAIT_TIME, 0);

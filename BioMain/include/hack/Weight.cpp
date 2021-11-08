@@ -58,18 +58,18 @@ int getWeight() { // we can not avoid to have some errors measuring the weight
 }
 
 int convertWeightToG(int weight) {
-  return ((long)(weight - getParameter(PARAM_WEIGHT_OFFSET)) * 1000) / getParameter(PARAM_WEIGHT_FACTOR);
+  return ((long)(weight - getParameter(PARAM_WEIGHT_EMPTY)) * 1000) / getParameter(PARAM_WEIGHT_FACTOR);
 }
 
 void processWeightCommand(char command, char* data, Print * output) {
   int weight = getWeight();
   switch (command) {
     case 'e': // define the empty level
-      setAndSaveParameter(PARAM_WEIGHT_OFFSET, weight);
+      setAndSaveParameter(PARAM_WEIGHT_EMPTY, weight);
       output->println(weight);
       break;
     case 'k': // define the weight one kg over the tare
-      setAndSaveParameter(PARAM_WEIGHT_FACTOR, weight - getParameter(PARAM_WEIGHT_OFFSET));
+      setAndSaveParameter(PARAM_WEIGHT_FACTOR, weight - getParameter(PARAM_WEIGHT_EMPTY));
       output->println(weight);
       break;
     case 'h': // define high level
