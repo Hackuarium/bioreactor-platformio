@@ -15,8 +15,9 @@ void resetParameters() {
   setAndSaveParameter(PARAM_WEIGHT_MAX, -32768);
   setAndSaveParameter(PARAM_WEIGHT_FACTOR, 0);
   setAndSaveParameter(PARAM_WEIGHT_OFFSET, 0);
+  setAndSaveParameter(PARAM_WEIGHT_TARGET, 1000);
 
-  setAndSaveParameter(PARAM_CURRENT_STEP, 20);
+  setAndSaveParameter(PARAM_CURRENT_STEP, 0);
   setAndSaveParameter(PARAM_CURRENT_WAIT_TIME, 0);
   for (uint8_t i = FIRST_STEP_PARAMETER; i <= LAST_STEP_PARAMETER; i++) {
     setAndSaveParameter(i, 0);
