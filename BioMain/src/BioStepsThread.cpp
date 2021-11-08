@@ -100,8 +100,8 @@ THD_FUNCTION(ThreadSteps, arg) {
           }
           else {
             if( currentWeight > getParameter( PARAM_WEIGHT_TARGET ) ) {
-              setParameter(PARAM_ENABLED, 1 << FLAG_OUTPUT_1);
-              setParameter(PARAM_STATUS, 1 << FLAG_FOOD_CONTROL && 1 << FLAG_RELAY_EMPTYING);
+              setParameterBit( PARAM_STATUS, FLAG_FOOD_CONTROL );
+              setParameterBit( PARAM_STATUS, FLAG_RELAY_EMPTYING );
             }
             else {
               clearParameterBit( PARAM_ENABLED, FLAG_RELAY_EMPTYING );
@@ -113,7 +113,8 @@ THD_FUNCTION(ThreadSteps, arg) {
         case 4: // Wait for weight increase to yy grams
           static bool weightIncrease = true;
           if( value >= 0 && weightIncrease == true ) {
-            setParameter( PARAM_WEIGHT_TARGET, currentWeight * value / 100 );
+            int increase = currentWeight * (value + 100) / 100;
+            setParameter( PARAM_WEIGHT_TARGET, increase );
             weightIncrease = false;
           }
           else {
