@@ -18,8 +18,7 @@ void printWeightHelp(Print* output) {
   output->println(F("Weight help"));
   output->println(F("(we) Empty (tare)"));
   output->println(F("(wk) Empty + 1kg"));
-  output->println(F("(wl) Low level"));
-  output->println(F("(wh) High level"));
+  output->println(F("(wh) Filled level"));
   output->println(F("(wt) Test"));
 }
 
@@ -71,10 +70,6 @@ void processWeightCommand(char command, char* data, Print * output) {
       break;
     case 'k': // define the weight one kg over the tare
       setAndSaveParameter(PARAM_WEIGHT_FACTOR, weight - getParameter(PARAM_WEIGHT_OFFSET));
-      output->println(weight);
-      break;
-    case 'l': // define low level
-      setAndSaveParameter(PARAM_WEIGHT_MIN, weight);
       output->println(weight);
       break;
     case 'h': // define high level

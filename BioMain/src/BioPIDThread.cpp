@@ -45,7 +45,7 @@ void pid_ctrl() {
   heatingRegInput =max( getParameter(PARAM_TEMP_EXT1), getParameter(PARAM_TEMP_EXT2));
   heatingRegSetpoint = getParameter(PARAM_TEMP_TARGET);
   heatingRegPID.Compute();                                   // the computation takes only 30ms!
-  setParameter(PARAM_TEMP_PID, heatingRegOutput);
+  setParameter(PARAM_PID, heatingRegOutput);
   analogWrite(PID_CONTROL, heatingRegOutput);
 }
 

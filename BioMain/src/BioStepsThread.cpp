@@ -53,14 +53,6 @@ THD_FUNCTION(ThreadSteps, arg) {
         case 4:
           setParameter(PARAM_TEMP_TARGET, value * 100);
           break;
-        case 8:
-          int weightMin = value * getParameter(PARAM_WEIGHT_FACTOR) + getParameter(PARAM_WEIGHT_OFFSET) * 1000;
-          setParameter(PARAM_WEIGHT_MIN, weightMin );
-          break;
-        case 9:
-          int weightMax = value * getParameter(PARAM_WEIGHT_FACTOR) + getParameter(PARAM_WEIGHT_OFFSET) * 1000;
-          setParameter(PARAM_WEIGHT_MAX, weightMax);
-          break;
       }
       index++;
     } else { // it is an action

@@ -110,15 +110,13 @@
 #define PARAM_TEMP_EXT2      1   // B - temperature of the solution
 
 #define PARAM_TEMP_PCB       2   // C - temperature of the heating plate
-#define PARAM_TEMP_PID       3   // D - heating amount of energy
+#define PARAM_PID       3   // D - heating amount of energy
 #define PARAM_TEMP_TARGET    4   // E - target temperature of the liquid
 
 #define PARAM_WEIGHT                  5  // F - in unit of the balance
 #define PARAM_WEIGHT_G                6  // G - in unit of the balance
 #define PARAM_WEIGHT_SINCE_LAST_EVENT 7  // H - last weight
-#define PARAM_WEIGHT_MIN              8  // I
-#define PARAM_WEIGHT_MAX              9  // J
-#define PARAM_WEIGHT_TARGET           10 // K
+#define PARAM_WEIGHT_MAX              8  // J
 
 #define PARAM_STEPPER_SPEED        26   // AA - motor speed, in RPM
 #define PARAM_STEPPER_SECONDS      27   // AB   number of seconds before changing direction

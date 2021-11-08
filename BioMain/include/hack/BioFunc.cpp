@@ -11,11 +11,9 @@ void resetParameters() {
   setAndSaveParameter(PARAM_TEMP_PCB, ERROR_VALUE);
   setAndSaveParameter(PARAM_TEMP_TARGET, 3000);
 
-  setAndSaveParameter(PARAM_WEIGHT_MIN, 32767);
   setAndSaveParameter(PARAM_WEIGHT_MAX, -32768);
   setAndSaveParameter(PARAM_WEIGHT_FACTOR, 0);
   setAndSaveParameter(PARAM_WEIGHT_OFFSET, 0);
-  setAndSaveParameter(PARAM_WEIGHT_TARGET, 1000);
 
   setAndSaveParameter(PARAM_CURRENT_STEP, 0);
   setAndSaveParameter(PARAM_CURRENT_WAIT_TIME, 0);
