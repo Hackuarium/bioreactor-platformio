@@ -9,7 +9,7 @@
 uint8_t serialBufferPositionB = 0;
 char serialBufferB[SERIAL_BUFFER_LENGTH];
 
-THD_FUNCTION( ThreadSerial, arg ) {
+THD_FUNCTION(ThreadSerial, arg) {
   Serial.begin(9600);
   while (true) {
     while (Serial.available()) {

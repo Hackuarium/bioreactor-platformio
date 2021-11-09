@@ -1,12 +1,14 @@
-// #define DEBUG_MEMORY    // takes huge amount of memory should not be activated !!
+// #define DEBUG_MEMORY    // takes huge amount of memory should not be
+// activated !!
 
 /*****************************************************************************************
   This thread takes care of the logs and manage the time and its synchronisation
-  The thread write the logs at a definite fixed interval of time in the SST25VF064 chip
-  The time synchronization works through the NTP protocol and our server
+  The thread write the logs at a definite fixed interval of time in the
+SST25VF064 chip The time synchronization works through the NTP protocol and our
+server
 ******************************************************************************************/
-#include "Hack.h"
 #include "BioParams.h"
+#include "Hack.h"
 
 #ifdef THR_SST_LOGGER
 
@@ -14,81 +16,81 @@
 #include <ChNil.h>
 
 //#include <SST.h>
-#include "libraries/SST/SST.h" 
 #include <SPI.h>
+#include "libraries/SST/SST.h"
 
 //#include <TimeLib.h>
-#include "libraries/time/TimeLib.h"
 #include <avr/wdt.h>
-
+#include "libraries/time/TimeLib.h"
 
 #include "BioSem.h"
-//SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific zones
+// SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific
+// zones
 
 /******************************************
    DEFINE FLASH VERSION (default is SST64)
  *****************************************/
 //  THIS SHOULD BE AUTOMATIC !!!
-//support SST25VF064C, SST26VF064B (64Mbits) or similar from Cypress
+// support SST25VF064C, SST26VF064B (64Mbits) or similar from Cypress
 #define SST64 1
-//support SST25VF032C, SST26VF032B (32Mbits) or similar from Cypress
+// support SST25VF032C, SST26VF032B (32Mbits) or similar from Cypress
 //#define SST32 1
 
 #if defined(SST64) || defined(SST32)
 
-//Types of logs
-#define ENTRY_SIZE_LINEAR_LOGS     64
-#define SIZE_TIMESTAMPS            4
-#define SIZE_COUNTER_ENTRY         4
+// Types of logs
+#define ENTRY_SIZE_LINEAR_LOGS 64
+#define SIZE_TIMESTAMPS 4
+#define SIZE_COUNTER_ENTRY 4
 
 // Definition of the log sectors in the flash for the logs
-#if defined(SST64) //64Mbits
-#define ADDRESS_MAX   0x800000 // http://www.sst.com/dotAsset/40498.pdf&usd=2&usg=ALhdy294tEkn4s_aKwurdSetYTt_vmXQhw
-#elif defined(SST32) //32Mbits
-#define ADDRESS_MAX   0X400000
+#if defined(SST64)  // 64Mbits
+#define ADDRESS_MAX \
+  0x800000  // http://www.sst.com/dotAsset/40498.pdf&usd=2&usg=ALhdy294tEkn4s_aKwurdSetYTt_vmXQhw
+#elif defined(SST32)  // 32Mbits
+#define ADDRESS_MAX 0X400000
 #endif
 
 // #define ADDRESS_MAX   0X001000 // if we don't want to use all memory !!!!
 
+#define ADDRESS_BEG 0x000000
+#define ADDRESS_LAST (ADDRESS_MAX - ENTRY_SIZE_LINEAR_LOGS)
+#define SECTOR_SIZE 4096
+#define NB_ENTRIES_PER_SECTOR (SECTOR_SIZE / ENTRY_SIZE_LINEAR_LOGS)
+#define ADDRESS_SIZE (ADDRESS_MAX - ADDRESS_BEG)
+// The number of entires by types of logs (seconds, minutes, hours,
+// commands/events)
+#define MAX_NB_ENTRIES (ADDRESS_SIZE / ENTRY_SIZE_LINEAR_LOGS)
 
-#define ADDRESS_BEG   0x000000
-#define ADDRESS_LAST  (ADDRESS_MAX - ENTRY_SIZE_LINEAR_LOGS)
-#define SECTOR_SIZE       4096
-#define NB_ENTRIES_PER_SECTOR    (SECTOR_SIZE  / ENTRY_SIZE_LINEAR_LOGS)
-#define ADDRESS_SIZE  (ADDRESS_MAX  - ADDRESS_BEG)
-// The number of entires by types of logs (seconds, minutes, hours, commands/events)
-#define MAX_NB_ENTRIES    (ADDRESS_SIZE  / ENTRY_SIZE_LINEAR_LOGS)
+#define MAX_MULTI_LOG 64  // Allows to display long log on serial
 
-#define MAX_MULTI_LOG 64 // Allows to display long log on serial
-
-
-#if FLASH_SELECT == 10 //Flash SS_SPI
-SST sst = SST('B', 6); //D10 is PORT B - 6
+#if FLASH_SELECT == 10  // Flash SS_SPI
+SST sst = SST('B', 6);  // D10 is PORT B - 6
 #endif
-#if FLASH_SELECT == 1 //Flash SS_SPI
-SST sst = SST('D', 3); //TX is PORT D - 3
+#if FLASH_SELECT == 1   // Flash SS_SPI
+SST sst = SST('D', 3);  // TX is PORT D - 3
 #endif
-#if FLASH_SELECT == A3 //Flash SS_SPI
-SST sst = SST('F', 4); // A3 is PORT F - 4
+#if FLASH_SELECT == A3  // Flash SS_SPI
+SST sst = SST('F', 4);  // A3 is PORT F - 4
 #endif
 
 uint32_t nextEntryID = 0;
 bool logActive = false;
 
-
 uint32_t findAddressOfEntryN(uint32_t entryN);
 
 /***********************************************************************************
   Save logs in the Flash memory.
-  event_number: If there is a command, then this parameter should be set with the
-  corresponding command/event number. Should be found in the define list of
+  event_number: If there is a command, then this parameter should be set with
+the corresponding command/event number. Should be found in the define list of
   commands/errors
 ************************************************************************************/
 void writeLog(uint16_t event_number, int parameter_value) {
   /********************************
              Safeguards
   ********************************/
-  if (!logActive) return;
+  if (!logActive)
+    return;
   /*****************************
             Slave Select
   ******************************/
@@ -100,7 +102,8 @@ void writeLog(uint16_t event_number, int parameter_value) {
   uint32_t startAddress = findAddressOfEntryN(nextEntryID);
 
   /************************************************************************************
-      Test if it is the begining of one sector, erase the sector of 4096 bytes if needed  delay(2);
+      Test if it is the begining of one sector, erase the sector of 4096 bytes
+    if needed  delay(2);
     ************************************************************************************/
   if ((!(nextEntryID % NB_ENTRIES_PER_SECTOR))) {
     long start = millis();
@@ -116,18 +119,17 @@ void writeLog(uint16_t event_number, int parameter_value) {
           Writing Sequence
   ******************************/
 
-
-  sst.flashWriteInit(startAddress); // Initialize with the right address
-  sst.flashWriteNextInt32(nextEntryID);      //4 bytes of the entry number
-  sst.flashWriteNextInt32(timenow);            //4 bytes of the timestamp in the memory using a mask
+  sst.flashWriteInit(startAddress);      // Initialize with the right address
+  sst.flashWriteNextInt32(nextEntryID);  // 4 bytes of the entry number
+  sst.flashWriteNextInt32(
+      timenow);  // 4 bytes of the timestamp in the memory using a mask
   for (byte i = 0; i < NB_PARAMETERS_LINEAR_LOGS; i++) {
     param = getParameter(i);
-    sst.flashWriteNextInt16(param);          //2 bytes per parameter
+    sst.flashWriteNextInt16(param);  // 2 bytes per parameter
   }
-  sst.flashWriteNextInt16(event_number);    //event
-  sst.flashWriteNextInt16(parameter_value); //parameter value */
-  sst.flashWriteFinish();                   // finish the writing process
-
+  sst.flashWriteNextInt16(event_number);     // event
+  sst.flashWriteNextInt16(parameter_value);  // parameter value */
+  sst.flashWriteFinish();                    // finish the writing process
 
   /*****************************
           Check saved information
@@ -136,16 +138,21 @@ void writeLog(uint16_t event_number, int parameter_value) {
   ******************************/
   bool isLogValid = true;
   sst.flashReadInit(findAddressOfEntryN(nextEntryID));
-  if (sst.flashReadNextInt32() != nextEntryID) isLogValid = false;
-  if (sst.flashReadNextInt32() != timenow) isLogValid = false;
+  if (sst.flashReadNextInt32() != nextEntryID)
+    isLogValid = false;
+  if (sst.flashReadNextInt32() != timenow)
+    isLogValid = false;
   for (byte i = 0; i < NB_PARAMETERS_LINEAR_LOGS; i++) {
-    if (sst.flashReadNextInt16() != getParameter(i)) isLogValid = false;
+    if (sst.flashReadNextInt16() != getParameter(i))
+      isLogValid = false;
   }
-  if (sst.flashReadNextInt16() != event_number) isLogValid = false;
-  if (sst.flashReadNextInt16() != parameter_value) isLogValid = false;
+  if (sst.flashReadNextInt16() != event_number)
+    isLogValid = false;
+  if (sst.flashReadNextInt16() != parameter_value)
+    isLogValid = false;
   sst.flashReadFinish();
   if (isLogValid) {
-    //Update the value of the next event log position in the memory
+    // Update the value of the next event log position in the memory
     nextEntryID++;
   } else {
     Serial.print(F("Log fail "));
@@ -165,17 +172,18 @@ void writeLog(uint16_t event_number, int parameter_value) {
 
 /******************************************************************************************
   Read the corresponding logs in the flash memory of the entry number (ID).
-  result: Array of uint8_t where the logs are stored. It should be a 32 bytes array
-  for the 3 RRD logs and 12 bytes for the commands/events logs.
-  #ifdef LOG_INTERVAL
-  entryN: Log ID that will correspond to the logs address to be read and stored in result
-  return:  Error flag: 0: no error occured
-  EVENT_ERROR_NOT_FOUND_ENTRY_N: The log ID (entryN) was not found in the flash memory
+  result: Array of uint8_t where the logs are stored. It should be a 32 bytes
+ array for the 3 RRD logs and 12 bytes for the commands/events logs. #ifdef
+ LOG_INTERVAL entryN: Log ID that will correspond to the logs address to be read
+ and stored in result return:  Error flag: 0: no error occured
+  EVENT_ERROR_NOT_FOUND_ENTRY_N: The log ID (entryN) was not found in the flash
+ memory
  *****************************************************************************************/
 uint32_t printLogN(Print* output, uint32_t entryN) {
-  // Are we asking for a log entry that is not on the card anymore ? Then we just start with the first that is on the card
-  // And we skip a sector ...
-  if ((nextEntryID > MAX_NB_ENTRIES) && (entryN < (nextEntryID - MAX_NB_ENTRIES + NB_ENTRIES_PER_SECTOR))) {
+  // Are we asking for a log entry that is not on the card anymore ? Then we
+  // just start with the first that is on the card And we skip a sector ...
+  if ((nextEntryID > MAX_NB_ENTRIES) &&
+      (entryN < (nextEntryID - MAX_NB_ENTRIES + NB_ENTRIES_PER_SECTOR))) {
     entryN = nextEntryID - MAX_NB_ENTRIES + NB_ENTRIES_PER_SECTOR;
   }
   chSemWait(&lockTimeCriticalZone);
@@ -204,25 +212,24 @@ void Last_Log_To_SPI_buff(byte* buff) {
   chSemSignal(&lockTimeCriticalZone);
 }
 
-
 void loadLastEntryToParameters() {
   uint32_t addressOfEntryN = findAddressOfEntryN(nextEntryID - 1);
-  sst.flashReadInit(addressOfEntryN + 8); // we skip entryID and epoch
+  sst.flashReadInit(addressOfEntryN + 8);  // we skip entryID and epoch
   for (byte i = 0; i < NB_PARAMETERS_LINEAR_LOGS; i++) {
     setParameter(i, sst.flashReadNextInt16());
   }
   sst.flashReadFinish();
 }
 
-
 /******************************************************************************
-  Returns the address corresponding to one log ID nilThdSleepMilliseconds(5); nilThdSleepMilliseconds(5);
-  entryNb:     Log ID
-  return:      Address of the first byte where the corresponding log is located
+  Returns the address corresponding to one log ID nilThdSleepMilliseconds(5);
+nilThdSleepMilliseconds(5); entryNb:     Log ID return:      Address of the
+first byte where the corresponding log is located
 *******************************************************************************/
-uint32_t findAddressOfEntryN(uint32_t entryN)
-{
-  uint32_t address = ((entryN % MAX_NB_ENTRIES) * ENTRY_SIZE_LINEAR_LOGS) % ADDRESS_SIZE + ADDRESS_BEG;
+uint32_t findAddressOfEntryN(uint32_t entryN) {
+  uint32_t address =
+      ((entryN % MAX_NB_ENTRIES) * ENTRY_SIZE_LINEAR_LOGS) % ADDRESS_SIZE +
+      ADDRESS_BEG;
   return address;
 }
 
@@ -230,8 +237,7 @@ uint32_t findAddressOfEntryN(uint32_t entryN)
   Returns the last log ID stored in the memory
   return: Last log ID stored in the memory corresponding to a log type
 ******************************************************************************/
-void recoverLastEntryN()
-{
+void recoverLastEntryN() {
   uint32_t ID_temp = 0;
   uint32_t Time_temp = 0;
   uint32_t addressEntryN = ADDRESS_BEG;
@@ -251,12 +257,12 @@ void recoverLastEntryN()
 #endif
 
     // Test if first memory slot contains any information
-    if ((ID_temp == 0xFFFFFFFF) || (ID_temp < nextEntryID))
-    {
+    if ((ID_temp == 0xFFFFFFFF) || (ID_temp < nextEntryID)) {
       break;
     }
     addressEntryN += ENTRY_SIZE_LINEAR_LOGS;
-    nextEntryID = ID_temp + 1; // this will be the correct value in case of break
+    nextEntryID =
+        ID_temp + 1;  // this will be the correct value in case of break
     setTime(Time_temp);
 
     // we implement a quick advance
@@ -284,8 +290,8 @@ void recoverLastEntryN()
 /*****************************
   Memory related functions
  *****************************/
-//Setup the memory for future use
-//Need to be used only once at startup
+// Setup the memory for future use
+// Need to be used only once at startup
 void setupMemory() {
   SPI.begin();
   SPI.setDataMode(SPI_MODE0);
@@ -305,7 +311,6 @@ void formatFlash(Print* output) {
   chSemSignal(&lockTimeCriticalZone);
 }
 
-
 void testFlash(Print* output) {
   wdt_disable();
   chSemWait(&lockTimeCriticalZone);
@@ -313,7 +318,7 @@ void testFlash(Print* output) {
   output->println(F("You need to format after test lf1234"));
   for (int i = 0; i < ADDRESS_MAX / SECTOR_SIZE; i++) {
     uint32_t sectorFlash = i * SECTOR_SIZE;
-    sst.flashSectorErase( sectorFlash );
+    sst.flashSectorErase(sectorFlash);
     for (byte j = 0; j < SECTOR_SIZE / 64; j++) {
       long address = (long)i * SECTOR_SIZE + (long)j * 64;
       sst.flashWriteInit(address);
@@ -350,7 +355,8 @@ void readFlash(Print* output, long firstRecord) {
   chSemWait(&lockTimeCriticalZone);
   output->println(F("Index / Address / ID / Epoch"));
   for (int i = firstRecord; i < ADDRESS_MAX / SECTOR_SIZE; i++) {
-    if (i == (firstRecord + 256)) break;
+    if (i == (firstRecord + 256))
+      break;
     long address = findAddressOfEntryN(i);
     sst.flashReadInit(address);
     output->print(i);
@@ -386,7 +392,6 @@ void debugFlash(Print* output) {
         output->print(i);
         output->print(F(" "));
         toHex(output, index);
-
       }
     } else {
       if (isFF != 0) {
@@ -452,7 +457,6 @@ void printLoggerHelp(Print* output) {
   output->println(F("(lm) Multiple log"));
   output->println(F("(lr) Read (start record)"));
   output->println(F("(lt) Test"));
-
 }
 
 void processLoggerCommand(char command, char* data, Print* output) {
@@ -484,28 +488,27 @@ void processLoggerCommand(char command, char* data, Print* output) {
     case 'm':
       if (data[0] != '\0') {
         long currentValueLong = atol(data);
-        if (( currentValueLong - nextEntryID ) < 0) {
+        if ((currentValueLong - nextEntryID) < 0) {
           printLogN(output, currentValueLong);
-        }
-        else {
+        } else {
           byte endValue = MAX_MULTI_LOG;
           if ((uint32_t)currentValueLong > nextEntryID)
             endValue = 0;
-          else if (( nextEntryID - currentValueLong ) < MAX_MULTI_LOG)
+          else if ((nextEntryID - currentValueLong) < MAX_MULTI_LOG)
             endValue = nextEntryID - currentValueLong;
           for (byte i = 0; i < endValue; i++) {
             currentValueLong = printLogN(output, currentValueLong) + 1;
             chThdSleep(25);
           }
         }
-      }
-      else {
+      } else {
         output->println(nextEntryID - 1);
       }
       break;
 #ifdef DEBUG_MEMORY
     case 'n':
-      if (data[0] == '\0' || atoi(data) < NB_ENTRIES_PER_SECTOR || atoi(data) % NB_ENTRIES_PER_SECTOR) {
+      if (data[0] == '\0' || atoi(data) < NB_ENTRIES_PER_SECTOR ||
+          atoi(data) % NB_ENTRIES_PER_SECTOR) {
         output->print(F("Must be a multiple of "));
         output->println(NB_ENTRIES_PER_SECTOR);
       } else {
@@ -530,7 +533,6 @@ void processLoggerCommand(char command, char* data, Print* output) {
     default:
       printLoggerHelp(output);
   }
-
 }
 
 void dumpLoggerFlash(Print* output, uint32_t fromAddress, uint32_t toAddress) {
@@ -551,8 +553,7 @@ void dumpLoggerFlash(Print* output, uint32_t fromAddress, uint32_t toAddress) {
       j = 0;
       output->println(buf);
       chThdSleep(25);
-    }
-    else {
+    } else {
       output->print(buf);
     }
   }

@@ -20,9 +20,10 @@ void printBits(int x) {
 }
 
 THD_FUNCTION(ThreadSteps, arg) {
-  chThdSleep(3129); // wait a little bit not everything starts at once
+  chThdSleep(3129);  // wait a little bit not everything starts at once
 
-  // TODO know when the minute starts so that the minute does not change after couple of seconds
+  // TODO know when the minute starts so that the minute does not change after
+  // couple of seconds
   byte previousMinute = getMinute();
   uint16_t setStatus = 0b0000000000000000;
   int targetWeight = 0;
@@ -33,11 +34,12 @@ THD_FUNCTION(ThreadSteps, arg) {
     if (index >= NB_STEP_PARAMETERS) {
       index = 0;
     }
-    int stepValue = getParameter( index + FIRST_STEP_PARAMETER );
+    int stepValue = getParameter(index + FIRST_STEP_PARAMETER);
     byte parameter = (stepValue & 0b0111100000000000) >> 11;
     byte currentMinute = getMinute();
     int value = stepValue & 0b0000011111111111;
-    int fullEmptyWeightDifference = getParameter( PARAM_WEIGHT_MAX ) - getParameter( PARAM_WEIGHT_EMPTY ) ;
+    int fullEmptyWeightDifference =
+        getParameter(PARAM_WEIGHT_MAX) - getParameter(PARAM_WEIGHT_EMPTY);
     /*
     if (DEBUG_STEPS) {
       Serial.print("======> ");
@@ -52,24 +54,25 @@ THD_FUNCTION(ThreadSteps, arg) {
       Serial.println(value);
     }
     */
-    if (stepValue >> 15) { // we set a parameter
+    if (stepValue >> 15) {  // we set a parameter
       switch (parameter) {
         case 0:
           setParameter(PARAM_TEMP_TARGET, value * 100);
           break;
       }
       index++;
-    } else { // it is an action
-      int waitingTime = getParameter( PARAM_CURRENT_WAIT_TIME );
-      int currentWeight = getParameter( PARAM_WEIGHT );
-      switch ( parameter ) {
-        case 0: // Do nothing
+    } else {  // it is an action
+      int waitingTime = getParameter(PARAM_CURRENT_WAIT_TIME);
+      int currentWeight = getParameter(PARAM_WEIGHT);
+      switch (parameter) {
+        case 0:  // Do nothing
           index++;
           break;
-        case 1: // Wait in minutes
-        case 2: // Wait in hours
+        case 1:  // Wait in minutes
+        case 2:  // Wait in hours
           if (waitingTime <= 0 && stepValue > 0) {
-            setParameter(PARAM_CURRENT_WAIT_TIME, value * (parameter == 1 ? 1 : 60));
+            setParameter(PARAM_CURRENT_WAIT_TIME,
+                         value * (parameter == 1 ? 1 : 60));
           } else {
             if (DEBUG_STEPS) {
               Serial.print(waitingTime);
@@ -88,20 +91,27 @@ THD_FUNCTION(ThreadSteps, arg) {
             }
           }
           break;
-        case 3: // Wait for weight reduction in percentage
-          targetWeight = fullEmptyWeightDifference * value / 100.0 + getParameter( PARAM_WEIGHT_EMPTY );
-          if (( targetWeight < 0 && currentWeight >= targetWeight ) || ( targetWeight > 0 && currentWeight <= targetWeight )) {
+        case 3:  // Wait for weight reduction in percentage
+          targetWeight = fullEmptyWeightDifference * value / 100.0 +
+                         getParameter(PARAM_WEIGHT_EMPTY);
+          if ((targetWeight < 0 && currentWeight >= targetWeight) ||
+              (targetWeight > 0 && currentWeight <= targetWeight)) {
             index++;
           }
           break;
-        case 4: // Wait for weight increase in percentage
-          targetWeight = fullEmptyWeightDifference * value / 100.0 + getParameter( PARAM_WEIGHT_EMPTY );
-          if (( targetWeight < 0 && currentWeight <= targetWeight ) || ( targetWeight > 0 && currentWeight >= targetWeight )) {
+        case 4:  // Wait for weight increase in percentage
+          targetWeight = fullEmptyWeightDifference * value / 100.0 +
+                         getParameter(PARAM_WEIGHT_EMPTY);
+          if ((targetWeight < 0 && currentWeight <= targetWeight) ||
+              (targetWeight > 0 && currentWeight >= targetWeight)) {
             index++;
           }
           break;
-        case 5: // Wait for temperature change (continue if < 0.5°C)
-          if (abs( ( getParameter(PARAM_TEMP_EXT1) + getParameter(PARAM_TEMP_EXT2) ) / 2.0 - getParameter(PARAM_TEMP_TARGET)) < value) {
+        case 5:  // Wait for temperature change (continue if < 0.5°C)
+          if (abs((getParameter(PARAM_TEMP_EXT1) +
+                   getParameter(PARAM_TEMP_EXT2)) /
+                      2.0 -
+                  getParameter(PARAM_TEMP_TARGET)) < value) {
             index++;
           }
           break;

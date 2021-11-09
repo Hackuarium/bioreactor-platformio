@@ -7,22 +7,24 @@
 
 /* The qualifier represents the card ID and is stored just after the last
  * parameter */
-uint16_t getQualifier() { return eeprom_read_word((uint16_t *)(EE_QUALIFIER)); }
+uint16_t getQualifier() {
+  return eeprom_read_word((uint16_t*)(EE_QUALIFIER));
+}
 
 void setQualifier(uint16_t value) {
-  eeprom_write_word((uint16_t *)(EE_QUALIFIER), value);
+  eeprom_write_word((uint16_t*)(EE_QUALIFIER), value);
 }
 
 void setDataLong(int index, long value) {
-  eeprom_write_dword((uint32_t *)(EEPROM_MAX_ADDR - 4 * index - 3), value);
+  eeprom_write_dword((uint32_t*)(EEPROM_MAX_ADDR - 4 * index - 3), value);
 }
 
 long getDataLong(int index) {
-  return eeprom_read_dword((uint32_t *)(EEPROM_MAX_ADDR - 4 * index - 3));
+  return eeprom_read_dword((uint32_t*)(EEPROM_MAX_ADDR - 4 * index - 3));
 }
 
 // code from http://www.arduino.cc/playground/Code/EepromUtil
-void getStatusEEPROM(Print *output) {
+void getStatusEEPROM(Print* output) {
   int bytesPerRow = 16;
   int i;
   int j;
@@ -40,7 +42,7 @@ void getStatusEEPROM(Print *output) {
     }
 
     // read current byte from eeprom
-    b = eeprom_read_byte((uint8_t *)i);
+    b = eeprom_read_byte((uint8_t*)i);
     sprintf(buf, "%02X ", b);
     j++;
     if (j == bytesPerRow) {

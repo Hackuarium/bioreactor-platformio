@@ -1,4 +1,6 @@
-// code taken from https://github.com/Hackuarium/simple-spectro/tree/master/arduino/SimpleSpectro. Thread allowing serail over usb communication.
+// code taken from
+// https://github.com/Hackuarium/simple-spectro/tree/master/arduino/SimpleSpectro.
+// Thread allowing serail over usb communication.
 
 #include <Arduino.h>
 #include <ChNil.h>
@@ -9,10 +11,10 @@
 extern char serialBuffer[SERIAL_BUFFER_LENGTH];
 extern uint8_t serialBufferPosition;
 
-void printResult( char* , Print* );
-void printHelp( Print* );
-void processSpecificCommand( char*, char*, Print* );
-void printSpecificHelp( Print * );
+void printResult(char*, Print*);
+void printHelp(Print*);
+void processSpecificCommand(char*, char*, Print*);
+void printSpecificHelp(Print*);
 
 /*
   SerialEvent occurs whenever a new data comes in the
@@ -33,15 +35,15 @@ void printSpecificHelp( Print * );
   nnnRRxxx where
   * nnn : the I2C device number
   * RR : the register to write as a letter: A for 0, B for 1, etc.
-  * xxx : a number 
+  * xxx : a number
 
   s : read all the parameters
   h : help
   l : show the log file
 */
 
-void printResult( char*, Print*);
-void printHelp( Print* );
-void noThread( Print* );
+void printResult(char*, Print*);
+void printHelp(Print*);
+void noThread(Print*);
 
 #endif

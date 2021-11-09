@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include <ChNil.h>
 
-#include "BioParams.h"
 #include "BioOneWire.h"
+#include "BioParams.h"
 
 #ifdef THR_ONEWIRE
 

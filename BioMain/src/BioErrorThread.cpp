@@ -6,8 +6,7 @@
 
 #ifdef THR_ERROR
 
-THD_FUNCTION( ThreadError, arg )
-{
+THD_FUNCTION(ThreadError, arg) {
   chThdSleep(4520);
   pinMode(OUT_ERROR, OUTPUT);
   uint8_t errorCounter = 0;

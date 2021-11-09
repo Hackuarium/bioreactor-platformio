@@ -28,12 +28,12 @@ void requestEvent() {
 
 void receiveEvent() {
   if (Wire.available()) {
-    command = Wire.read(); // receive byte as a character
+    command = Wire.read();  // receive byte as a character
   }
 
-  if (Wire.available()) { // we need to set the value of a register
+  if (Wire.available()) {  // we need to set the value of a register
     int value = 0;
-    while (Wire.available()) { // loop through all but the last
+    while (Wire.available()) {  // loop through all but the last
       value <<= 8;
       value |= Wire.read();
     }
@@ -50,9 +50,9 @@ void receiveEvent() {
 #ifdef THR_WIRE_SLAVE
 
 void startWireSlave() {
-  Wire.begin(THR_WIRE_SLAVE);   // join i2c bus with address #8
-  Wire.onReceive(receiveEvent); // register event
-  Wire.onRequest(requestEvent); // register event
+  Wire.begin(THR_WIRE_SLAVE);    // join i2c bus with address #8
+  Wire.onReceive(receiveEvent);  // register event
+  Wire.onRequest(requestEvent);  // register event
 }
 
 #endif

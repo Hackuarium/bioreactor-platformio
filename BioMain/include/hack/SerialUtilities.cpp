@@ -1,6 +1,8 @@
-// code taken from https://github.com/Hackuarium/simple-spectro/tree/master/arduino/SimpleSpectro. Allows serial monitoring communication.
-#include <ChNil.h>
+// code taken from
+// https://github.com/Hackuarium/simple-spectro/tree/master/arduino/SimpleSpectro.
+// Allows serial monitoring communication.
 #include <Arduino.h>
+#include <ChNil.h>
 
 //#include <TimeLib.h>
 #include "libraries/time/TimeLib.h"
@@ -8,8 +10,8 @@
 #include "BioFunc.h"
 //#include <hack/BioFunc.h>
 //#include <hack/BioFunc.h>
-#include "Params.h"
 #include "EEPROMHack.h"
+#include "Params.h"
 
 void printUtilitiesHelp(Print* output) {
   output->println(F("(uc) Compact settings"));
@@ -24,7 +26,9 @@ void printFreeMemory(Print* output) {
   chPrintUnusedStack(output);
 }
 
-void processUtilitiesCommand(char command, char* paramValue, Print* output) { // char and char* ??
+void processUtilitiesCommand(char command,
+                             char* paramValue,
+                             Print* output) {  // char and char* ??
   switch (command) {
     case 'c':
       if (paramValue[0] != '\0') {
@@ -59,8 +63,7 @@ void processUtilitiesCommand(char command, char* paramValue, Print* output) { //
           resetParameters();
           output->println(F("Reset done"));
         }
-      }
-      else {
+      } else {
         output->println(F("To reset enter ur1234"));
       }
       break;

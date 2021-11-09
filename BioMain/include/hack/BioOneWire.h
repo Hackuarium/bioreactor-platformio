@@ -21,17 +21,17 @@
     2. Issue the Skip Rom command (0xCC)
     3. Issue the Convert T command (0×44)
 
-    The conversion in 12 bits take 750ms, so we actually read the previous value :
+    The conversion in 12 bits take 750ms, so we actually read the previous value
+ :
     1. Issue a Reset pulse and observe the Presence of the thermometer
     2. Issue the Skip Rom command (0xCC)
     3. Issue the Read Scratchpad command (0xBE)
     4. Read the next two bytes which represent the temperature
  *********************************************/
 
-
-void getTemperature( OneWire &ow, int, char );
-void oneWireInfoSS( OneWire &ow, Print* );
-//bus info function
-void oneWireInfo( Print* );
+void getTemperature(OneWire& ow, int, char);
+void oneWireInfoSS(OneWire& ow, Print*);
+// bus info function
+void oneWireInfo(Print*);
 
 #endif

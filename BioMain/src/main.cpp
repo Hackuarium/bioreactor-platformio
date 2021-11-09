@@ -24,7 +24,7 @@ void setup() {
   pinMode(FLASH_SELECT, OUTPUT);
   setupMemory();
   recoverLastEntryN();
-  loadLastEntryToParameters();   //get back the previous config
+  loadLastEntryToParameters();  // get back the previous config
 #endif
 
   chBegin();

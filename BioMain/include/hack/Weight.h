@@ -5,9 +5,9 @@
 
 #ifdef THR_WEIGHT
 
-void printWeightHelp( Print* );
+void printWeightHelp(Print*);
 int getWeight();
-int convertWeightToG( int );
-void processWeightCommand( char, char*, Print* );
+int convertWeightToG(int);
+void processWeightCommand(char, char*, Print*);
 
 #endif

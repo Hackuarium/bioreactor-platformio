@@ -7,18 +7,17 @@
 /****************************
     THREAD STEPPER MOTOR
 
-    The last verison use a stepper driver and therefore we may simply use a Timer to generate
-    an impulsion at a very precise time frame.
+    The last verison use a stepper driver and therefore we may simply use a
+ Timer to generate an impulsion at a very precise time frame.
  ******************************/
 
 //--------------- IS STEPPER STOPPED ---------------//
 
 bool isStepperStopped();
-void doSteps( int, int );
+void doSteps(int, int);
 
 //--------------- STEPPER THREAD ---------------//
-THD_WORKING_AREA( waThreadStepper, 16 );
-THD_FUNCTION( ThreadStepper, arg );
-
+THD_WORKING_AREA(waThreadStepper, 16);
+THD_FUNCTION(ThreadStepper, arg);
 
 #endif

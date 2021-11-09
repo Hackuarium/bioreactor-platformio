@@ -7,7 +7,8 @@
 
 #ifdef THR_ONEWIRE
 
-THD_WORKING_AREA( waThreadPID, 120 ); //tune the allocated mem (here extra is provided)
+THD_WORKING_AREA(waThreadPID,
+                 120);  // tune the allocated mem (here extra is provided)
 THD_FUNCTION(ThreadPID, arg);
 
 /*Temperature PID Control addressing relay*/

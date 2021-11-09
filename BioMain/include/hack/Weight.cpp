@@ -7,7 +7,8 @@
 #ifdef THR_WEIGHT
 
 #include "BioSem.h"
-//SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific zones
+// SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific
+// zones
 
 //#include <HX711.h>
 #include "libraries/HX711/HX711.h"
@@ -22,11 +23,11 @@ void printWeightHelp(Print* output) {
   output->println(F("(wt) Test"));
 }
 
-int getWeight() { // we can not avoid to have some errors measuring the weight
+int getWeight() {  // we can not avoid to have some errors measuring the weight
   // and currently we don't know where it is coming from
-  // so we need to find out what are the correct values and what are the wrong one
-  // if there is an error it always end with 00000001
-  // we will also need 4 consecutive values that differ less than 10%
+  // so we need to find out what are the correct values and what are the wrong
+  // one if there is an error it always end with 00000001 we will also need 4
+  // consecutive values that differ less than 10%
   byte counter = 0;
   long weight = 0;
   while (counter < 4) {
@@ -58,21 +59,23 @@ int getWeight() { // we can not avoid to have some errors measuring the weight
 }
 
 int convertWeightToG(int weight) {
-  return ((long)(weight - getParameter(PARAM_WEIGHT_EMPTY)) * 1000) / getParameter(PARAM_WEIGHT_FACTOR);
+  return ((long)(weight - getParameter(PARAM_WEIGHT_EMPTY)) * 1000) /
+         getParameter(PARAM_WEIGHT_FACTOR);
 }
 
-void processWeightCommand(char command, char* data, Print * output) {
+void processWeightCommand(char command, char* data, Print* output) {
   int weight = getWeight();
   switch (command) {
-    case 'e': // define the empty level
+    case 'e':  // define the empty level
       setAndSaveParameter(PARAM_WEIGHT_EMPTY, weight);
       output->println(weight);
       break;
-    case 'k': // define the weight one kg over the tare
-      setAndSaveParameter(PARAM_WEIGHT_FACTOR, weight - getParameter(PARAM_WEIGHT_EMPTY));
+    case 'k':  // define the weight one kg over the tare
+      setAndSaveParameter(PARAM_WEIGHT_FACTOR,
+                          weight - getParameter(PARAM_WEIGHT_EMPTY));
       output->println(weight);
       break;
-    case 'h': // define high level
+    case 'h':  // define high level
       setAndSaveParameter(PARAM_WEIGHT_MAX, weight);
       output->println(weight);
       break;

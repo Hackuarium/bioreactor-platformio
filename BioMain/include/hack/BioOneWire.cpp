@@ -24,16 +24,17 @@
     2. Issue the Skip Rom command (0xCC)
     3. Issue the Convert T command (0×44)
 
-    The conversion in 12 bits take 750ms, so we actually read the previous value :
+    The conversion in 12 bits take 750ms, so we actually read the previous value
+ :
     1. Issue a Reset pulse and observe the Presence of the thermometer
     2. Issue the Skip Rom command (0xCC)
     3. Issue the Read Scratchpad command (0xBE)
     4. Read the next two bytes which represent the temperature
  *********************************************/
 
-
 #include "BioSem.h"
-//SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific zones
+// SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific
+// zones
 
 #ifdef TEMP_EXT1
 OneWire oneWire1(TEMP_EXT1);
@@ -49,7 +50,7 @@ OneWire oneWire3(TEMP_PCB);
 
 uint8_t oneWireAddress[8];
 
-void getTemperature(OneWire &ow, int parameter, char errorFlag) {
+void getTemperature(OneWire& ow, int parameter, char errorFlag) {
   uint8_t present = 0;
   uint8_t type_s;
   uint8_t data[12];
@@ -58,7 +59,7 @@ void getTemperature(OneWire &ow, int parameter, char errorFlag) {
   bool save;
   bool set;
 
-  if ( !ow.search(addr)) {
+  if (!ow.search(addr)) {
     ow.reset_search();
     chThdSleep(200);
     if (!ow.search(addr)) {
@@ -71,7 +72,6 @@ void getTemperature(OneWire &ow, int parameter, char errorFlag) {
   } else {
     save = saveAndLogError(false, errorFlag);
   }
-
 
   if (OneWire::crc8(addr, 7) != addr[7]) {
     Serial.println(F("CRC invalid!"));
@@ -96,19 +96,19 @@ void getTemperature(OneWire &ow, int parameter, char errorFlag) {
   chSemWait(&lockTimeCriticalZone);
   ow.reset();
   ow.select(addr);
-  ow.write(0x44, 1);        // start conversion, with parasite power on at the end
+  ow.write(0x44, 1);  // start conversion, with parasite power on at the end
   chSemSignal(&lockTimeCriticalZone);
 
-  chThdSleep(800);     // maybe 750ms is enough, maybe not
+  chThdSleep(800);  // maybe 750ms is enough, maybe not
   // we might do a ds.depower() here, but the reset will take care of it.
 
   chSemWait(&lockTimeCriticalZone);
   present = ow.reset();
   ow.select(addr);
-  ow.write(0xBE);         // Read Scratchpad
+  ow.write(0xBE);  // Read Scratchpad
   chSemSignal(&lockTimeCriticalZone);
 
-  for (byte i = 0; i < 9; i++) {           // we need 9 bytes
+  for (byte i = 0; i < 9; i++) {  // we need 9 bytes
     data[i] = ow.read();
   }
 
@@ -118,7 +118,7 @@ void getTemperature(OneWire &ow, int parameter, char errorFlag) {
   // even when compiled on a 32 bit processor.
   int16_t raw = (data[1] << 8) | data[0];
   if (type_s) {
-    raw = raw << 3; // 9 bit resolution default
+    raw = raw << 3;  // 9 bit resolution default
     if (data[7] == 0x10) {
       // "count remain" gives full 12 bit resolution
       raw = (raw & 0xFFF0) + 12 - data[6];
@@ -126,9 +126,12 @@ void getTemperature(OneWire &ow, int parameter, char errorFlag) {
   } else {
     byte cfg = (data[4] & 0x60);
     // at lower res, the low bits are undefined, so let's zero them
-    if (cfg == 0x00) raw = raw & ~7;  // 9 bit resolution, 93.75 ms
-    else if (cfg == 0x20) raw = raw & ~3; // 10 bit res, 187.5 ms
-    else if (cfg == 0x40) raw = raw & ~1; // 11 bit res, 375 ms
+    if (cfg == 0x00)
+      raw = raw & ~7;  // 9 bit resolution, 93.75 ms
+    else if (cfg == 0x20)
+      raw = raw & ~3;  // 10 bit res, 187.5 ms
+    else if (cfg == 0x40)
+      raw = raw & ~1;  // 11 bit res, 375 ms
     //// default is 12 bit resolution, 750 ms conversion time
   }
   celsius = (float)raw / 16.0;
@@ -137,14 +140,14 @@ void getTemperature(OneWire &ow, int parameter, char errorFlag) {
   chThdSleep(1000);
 }
 
-
-void oneWireInfoSS(OneWire &ow, Print* output) { // TODO
+void oneWireInfoSS(OneWire& ow, Print* output) {  // TODO
   chSemWait(&lockTimeCriticalZone);
   ow.reset_search();
   while (ow.search(oneWireAddress)) {
     for (byte i = 0; i < 8; i++) {
       output->print(' ');
-      if (oneWireAddress[i]<16) output->print('0');
+      if (oneWireAddress[i] < 16)
+        output->print('0');
       output->print(oneWireAddress[i], HEX);
     }
     output->println("");
@@ -153,9 +156,8 @@ void oneWireInfoSS(OneWire &ow, Print* output) { // TODO
   chSemSignal(&lockTimeCriticalZone);
 }
 
-
-//bus info function
-void oneWireInfo(Print* output) { // TODO
+// bus info function
+void oneWireInfo(Print* output) {  // TODO
 #ifdef TEMP_EXT1
   output->println(F("Ext1"));
   oneWireInfoSS(oneWire1, output);

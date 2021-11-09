@@ -10,8 +10,8 @@
 
 uint8_t command;
 
-void printResult( char*, Print* );
-int wireSlaveCommand( uint8_t, long );
+void printResult(char*, Print*);
+int wireSlaveCommand(uint8_t, long);
 
 void requestEvent();
 void receiveEvent();

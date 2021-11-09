@@ -7,17 +7,17 @@
 #include <TimeLib.h>
 
 // Libraries
+#include "EEPROMHack.h"
 #include "NullStream.h"
+#include "Params.h"
 #include "ToHex.h"
 #include "Utility.h"
-#include "Params.h"
-#include "EEPROMHack.h"
 //#include "EEPROMLogger.h"
 #include "SSTLogger.h"
 //#include "WireSlaveCh.h"
 //#include "WireMasterCh.h"
-#include "SerialUtilities.h"
 #include "Serial.h"
+#include "SerialUtilities.h"
 #include "Status.h"
 */
 

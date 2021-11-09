@@ -1,6 +1,6 @@
 #include <Arduino.h>
-#include <ChNil.h>
 #include <BioParams.h>
+#include <ChNil.h>
 #include <Params.h>
 
 #ifdef THR_FAN
@@ -14,20 +14,16 @@ void setFan() {
   } else {
     analogWrite(OUT_FAN, 0);
   }
-
 }
 
-THD_FUNCTION(ThreadFan, arg)
-{
+THD_FUNCTION(ThreadFan, arg) {
   chThdSleep(1000);
   pinMode(OUT_FAN, OUTPUT);
 
-
   while (true) {
     setFan();
-    chThdSleep(2000); 
+    chThdSleep(2000);
   }
 }
-
 
 #endif

@@ -3,9 +3,9 @@
 #include "Params.h"
 #include "SSTLogger.h"
 
-
-bool isError( int filter ) {
-  if ((getParameter(PARAM_ERROR) & filter) != 0) return true;
+bool isError(int filter) {
+  if ((getParameter(PARAM_ERROR) & filter) != 0)
+    return true;
   return false;
 }
 
@@ -36,7 +36,7 @@ bool startProcess(byte statusFlag) {
 }
 
 bool stopProcess(uint8_t statusFlag) {
-  bool statusChanged =  clearParameterBit(PARAM_STATUS, statusFlag);
+  bool statusChanged = clearParameterBit(PARAM_STATUS, statusFlag);
 #ifdef EVENT_LOGGING
   if (statusChanged) {
     writeLog(EVENT_STATUS_DISABLE, statusFlag);
