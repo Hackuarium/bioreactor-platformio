@@ -32,10 +32,11 @@ THD_FUNCTION(ThreadSteps, arg) {
     if (index >= NB_STEP_PARAMETERS) {
       index = 0;
     }
-    int stepValue = getParameter(index + FIRST_STEP_PARAMETER);
+    int stepValue = getParameter( index + FIRST_STEP_PARAMETER );
     byte parameter = (stepValue & 0b0111100000000000) >> 11;
     byte currentMinute = getMinute();
     int value = stepValue & 0b0000011111111111;
+    /*
     if (DEBUG_STEPS) {
       Serial.print("======> ");
       Serial.println(index);
@@ -48,15 +49,16 @@ THD_FUNCTION(ThreadSteps, arg) {
       Serial.print("V:");
       Serial.println(value);
     }
+    */
     if (stepValue >> 15) { // we set a parameter
       switch (parameter) {
         case 4:
           setParameter(PARAM_TEMP_TARGET, value * 100);
           break;
       }
-      index++;
+      ++index;
     } else { // it is an action
-      int waitingTime = getParameter(PARAM_CURRENT_WAIT_TIME);
+      int waitingTime = getParameter( PARAM_CURRENT_WAIT_TIME );
       uint16_t currentWeight = getParameter( PARAM_WEIGHT_G );
       switch (parameter) {
         case 0: // Do nothing
@@ -85,40 +87,25 @@ THD_FUNCTION(ThreadSteps, arg) {
           }
           break;
         case 3: // Wait for weight reduction to yy grams
-          static bool weightReduction = true;
-          if( value >= 0 && weightReduction == true ) {
-            setParameter( PARAM_WEIGHT_TARGET, currentWeight * value / 100 );
-            weightReduction = false;
+          uint16_t reductionWeight = getParameter( PARAM_WEIGHT_MAX )  * value / 100;
+          if( currentWeight > reductionWeight ) {
+            setParameterBit( PARAM_STATUS, FLAG_FOOD_CONTROL );
+            setParameterBit( PARAM_STATUS, FLAG_RELAY_EMPTYING );
           }
           else {
-            if( currentWeight > getParameter( PARAM_WEIGHT_TARGET ) ) {
-              setParameterBit( PARAM_STATUS, FLAG_FOOD_CONTROL );
-              setParameterBit( PARAM_STATUS, FLAG_RELAY_EMPTYING );
-            }
-            else {
-              clearParameterBit( PARAM_ENABLED, FLAG_RELAY_EMPTYING );
-              index++;
-              weightReduction = true;
-            }
+            clearParameterBit( PARAM_STATUS, FLAG_RELAY_EMPTYING );
+            index++;
           }
           break;
         case 4: // Wait for weight increase to yy grams
-          static bool weightIncrease = true;
-          if( value >= 0 && weightIncrease == true ) {
-            int increase = currentWeight * (value + 100) / 100;
-            setParameter( PARAM_WEIGHT_TARGET, increase );
-            weightIncrease = false;
+          uint16_t increaseWeight = getParameter( PARAM_WEIGHT_MAX )  * value / 100;
+          if( currentWeight < increaseWeight ) {
+            setParameterBit( PARAM_STATUS, FLAG_FOOD_CONTROL );
+            setParameterBit( PARAM_STATUS, FLAG_RELAY_FILLING );
           }
           else {
-            if( currentWeight < getParameter( PARAM_WEIGHT_TARGET ) ) {
-              setParameterBit( PARAM_STATUS, FLAG_FOOD_CONTROL );
-              setParameterBit( PARAM_STATUS, FLAG_RELAY_FILLING );
-            }
-            else {
-              clearParameterBit(PARAM_STATUS, FLAG_RELAY_FILLING );
-              index++;
-              weightIncrease = true;
-            }
+            clearParameterBit(PARAM_STATUS, FLAG_RELAY_FILLING );
+            index++;
           }
           break;
         case 5: // Wait for temperature change (continue if < 0.5°C)
@@ -129,10 +116,11 @@ THD_FUNCTION(ThreadSteps, arg) {
         // Empty
         case 8:
           setParameter(PARAM_STATUS, value);
-          index++;
+          ++index;
           break;
         default:
-          index++;
+          ++index;
+          break;
       }
     }
     setParameter(PARAM_CURRENT_STEP, index);

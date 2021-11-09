@@ -28,10 +28,10 @@ THD_FUNCTION(ThreadWeight, arg) {
 
     // are we outside ranges ?
 
-    int error = (getParameter(PARAM_WEIGHT_MAX) - getParameter(PARAM_WEIGHT_MIN)) / 5;
+    int error = (getParameter(PARAM_WEIGHT_MAX) - getParameter(PARAM_WEIGHT_EMPTY)) / 5;
 
-    if ((error > 0 && ((weight < (getParameter(PARAM_WEIGHT_MIN) - error)) || (weight > (getParameter(PARAM_WEIGHT_MAX) + error)))) ||
-        (error < 0 && ((weight > (getParameter(PARAM_WEIGHT_MIN) - error)) || (weight < (getParameter(PARAM_WEIGHT_MAX) + error))))) {
+    if ((error > 0 && ((weight < (getParameter(PARAM_WEIGHT_EMPTY) - error)) || (weight > (getParameter(PARAM_WEIGHT_MAX) + error)))) ||
+        (error < 0 && ((weight > (getParameter(PARAM_WEIGHT_EMPTY) - error)) || (weight < (getParameter(PARAM_WEIGHT_MAX) + error))))) {
       saveAndLogError(true, FLAG_WEIGHT_RANGE_ERROR);
     } else {
       saveAndLogError(false, FLAG_WEIGHT_RANGE_ERROR);
