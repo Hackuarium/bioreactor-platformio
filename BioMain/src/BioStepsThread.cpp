@@ -25,8 +25,7 @@ THD_FUNCTION(ThreadSteps, arg) {
   // TODO know when the minute starts so that the minute does not change after couple of seconds
   byte previousMinute = getMinute();
   uint16_t setStatus = 0b0000000000000000;
-  int reductionWeight = 0;
-  int increaseWeight = 0;
+  int targetWeight = 0;
 
   while (true) {
     // allows to change the step from the terminal, we reload each time the step
@@ -38,6 +37,7 @@ THD_FUNCTION(ThreadSteps, arg) {
     byte parameter = (stepValue & 0b0111100000000000) >> 11;
     byte currentMinute = getMinute();
     int value = stepValue & 0b0000011111111111;
+    int fullEmptyWeightDifference = getParameter( PARAM_WEIGHT_MAX ) - getParameter( PARAM_WEIGHT_EMPTY ) ;
     /*
     if (DEBUG_STEPS) {
       Serial.print("======> ");
@@ -88,25 +88,15 @@ THD_FUNCTION(ThreadSteps, arg) {
             }
           }
           break;
-        case 3: // Wait for weight reduction to yy grams
-          reductionWeight = ( ( getParameter( PARAM_WEIGHT_MAX ) - getParameter( PARAM_WEIGHT_EMPTY ) ) * (value / 100.0) );
-          reductionWeight = reductionWeight + getParameter( PARAM_WEIGHT_EMPTY );
-          if (reductionWeight > getParameter( PARAM_WEIGHT_EMPTY ) )
-          {
-            reductionWeight = getParameter( PARAM_WEIGHT_EMPTY );
-          }
-          if( currentWeight >= reductionWeight ) {
+        case 3: // Wait for weight reduction in percentage
+          targetWeight = fullEmptyWeightDifference * value / 100.0 + getParameter( PARAM_WEIGHT_EMPTY );
+          if (( targetWeight < 0 && currentWeight >= targetWeight ) || ( targetWeight > 0 && currentWeight <= targetWeight )) {
             index++;
           }
           break;
-        case 4: // Wait for weight increase to yy grams
-          increaseWeight = ( ( getParameter( PARAM_WEIGHT_MAX ) - getParameter( PARAM_WEIGHT_EMPTY ) ) * (value / 100.0) );
-          increaseWeight = increaseWeight + getParameter( PARAM_WEIGHT_EMPTY );
-          if (increaseWeight < getParameter( PARAM_WEIGHT_MAX ) )
-          {
-            increaseWeight = getParameter( PARAM_WEIGHT_MAX );
-          }
-          if( currentWeight < increaseWeight ) {
+        case 4: // Wait for weight increase in percentage
+          targetWeight = fullEmptyWeightDifference * value / 100.0 + getParameter( PARAM_WEIGHT_EMPTY );
+          if (( targetWeight < 0 && currentWeight <= targetWeight ) || ( targetWeight > 0 && currentWeight >= targetWeight )) {
             index++;
           }
           break;
