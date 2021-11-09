@@ -170,7 +170,6 @@
 #define FLAG_PH_CALIBRATE         8
 #define FLAG_RELAY_ACID           9
 #define FLAG_RELAY_BASE           10
-#define FLAG_WAITING_TIME_HOURS   11
 
 
 // value that should not be taken into account

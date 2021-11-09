@@ -25,6 +25,8 @@ THD_FUNCTION(ThreadSteps, arg) {
   // TODO know when the minute starts so that the minute does not change after couple of seconds
   byte previousMinute = getMinute();
   uint16_t setStatus = 0b0000000000000000;
+  uint16_t reductionWeight = 0;
+  uint16_t increaseWeight = 0;
 
   while (true) {
     // allows to change the step from the terminal, we reload each time the step
@@ -56,11 +58,11 @@ THD_FUNCTION(ThreadSteps, arg) {
           setParameter(PARAM_TEMP_TARGET, value * 100);
           break;
       }
-      ++index;
+      index++;
     } else { // it is an action
       int waitingTime = getParameter( PARAM_CURRENT_WAIT_TIME );
       uint16_t currentWeight = getParameter( PARAM_WEIGHT_G );
-      switch (parameter) {
+      switch ( parameter ) {
         case 0: // Do nothing
           index++;
           break;
@@ -87,7 +89,7 @@ THD_FUNCTION(ThreadSteps, arg) {
           }
           break;
         case 3: // Wait for weight reduction to yy grams
-          uint16_t reductionWeight = getParameter( PARAM_WEIGHT_MAX )  * value / 100;
+          reductionWeight = getParameter( PARAM_WEIGHT_MAX ) * value / 100;
           if( currentWeight > reductionWeight ) {
             setParameterBit( PARAM_STATUS, FLAG_FOOD_CONTROL );
             setParameterBit( PARAM_STATUS, FLAG_RELAY_EMPTYING );
@@ -98,7 +100,7 @@ THD_FUNCTION(ThreadSteps, arg) {
           }
           break;
         case 4: // Wait for weight increase to yy grams
-          uint16_t increaseWeight = getParameter( PARAM_WEIGHT_MAX )  * value / 100;
+          increaseWeight = getParameter( PARAM_WEIGHT_MAX )  * value / 100;
           if( currentWeight < increaseWeight ) {
             setParameterBit( PARAM_STATUS, FLAG_FOOD_CONTROL );
             setParameterBit( PARAM_STATUS, FLAG_RELAY_FILLING );
@@ -115,11 +117,12 @@ THD_FUNCTION(ThreadSteps, arg) {
           break;
         // Empty
         case 8:
+          Serial.println("8");
           setParameter(PARAM_STATUS, value);
-          ++index;
+          index++;
           break;
         default:
-          ++index;
+          index++;
           break;
       }
     }

@@ -8,7 +8,7 @@
 uint8_t getMinute();
 void printBits( int );
 
-THD_WORKING_AREA( waThreadSteps, 100 );
+THD_WORKING_AREA( waThreadSteps, 110 );
 THD_FUNCTION(ThreadSteps, arg);
 
 #endif

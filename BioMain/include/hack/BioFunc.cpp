@@ -9,6 +9,7 @@ void resetParameters() {
   setAndSaveParameter(PARAM_TEMP_EXT1, ERROR_VALUE);
   setAndSaveParameter(PARAM_TEMP_EXT2, ERROR_VALUE);
   setAndSaveParameter(PARAM_TEMP_PCB, ERROR_VALUE);
+  setAndSaveParameter(PARAM_PID, 0);
   setAndSaveParameter(PARAM_TEMP_TARGET, 3000);
 
   setAndSaveParameter(PARAM_WEIGHT_MAX, -32768);
