@@ -25,8 +25,8 @@ THD_FUNCTION(ThreadSteps, arg) {
   // TODO know when the minute starts so that the minute does not change after couple of seconds
   byte previousMinute = getMinute();
   uint16_t setStatus = 0b0000000000000000;
-  uint16_t reductionWeight = 0;
-  uint16_t increaseWeight = 0;
+  int reductionWeight = 0;
+  int increaseWeight = 0;
 
   while (true) {
     // allows to change the step from the terminal, we reload each time the step
@@ -54,14 +54,14 @@ THD_FUNCTION(ThreadSteps, arg) {
     */
     if (stepValue >> 15) { // we set a parameter
       switch (parameter) {
-        case 4:
+        case 0:
           setParameter(PARAM_TEMP_TARGET, value * 100);
           break;
       }
       index++;
     } else { // it is an action
       int waitingTime = getParameter( PARAM_CURRENT_WAIT_TIME );
-      uint16_t currentWeight = getParameter( PARAM_WEIGHT );
+      int currentWeight = getParameter( PARAM_WEIGHT );
       switch ( parameter ) {
         case 0: // Do nothing
           index++;
@@ -89,7 +89,8 @@ THD_FUNCTION(ThreadSteps, arg) {
           }
           break;
         case 3: // Wait for weight reduction to yy grams
-          reductionWeight = ( getParameter( PARAM_WEIGHT_MAX ) - getParameter( PARAM_WEIGHT_EMPTY ) ) * value / 100 - getParameter( PARAM_WEIGHT_EMPTY );
+          reductionWeight = ( ( getParameter( PARAM_WEIGHT_MAX ) - getParameter( PARAM_WEIGHT_EMPTY ) ) * (value / 100.0) );
+          reductionWeight = reductionWeight + getParameter( PARAM_WEIGHT_EMPTY );
           if (reductionWeight > getParameter( PARAM_WEIGHT_EMPTY ) )
           {
             reductionWeight = getParameter( PARAM_WEIGHT_EMPTY );
@@ -99,7 +100,8 @@ THD_FUNCTION(ThreadSteps, arg) {
           }
           break;
         case 4: // Wait for weight increase to yy grams
-          increaseWeight = (( getParameter( PARAM_WEIGHT_MAX ) - getParameter( PARAM_WEIGHT_EMPTY ) ) * value ) / 100 - getParameter( PARAM_WEIGHT_EMPTY );
+          increaseWeight = ( ( getParameter( PARAM_WEIGHT_MAX ) - getParameter( PARAM_WEIGHT_EMPTY ) ) * (value / 100.0) );
+          increaseWeight = increaseWeight + getParameter( PARAM_WEIGHT_EMPTY );
           if (increaseWeight < getParameter( PARAM_WEIGHT_MAX ) )
           {
             increaseWeight = getParameter( PARAM_WEIGHT_MAX );
@@ -109,7 +111,7 @@ THD_FUNCTION(ThreadSteps, arg) {
           }
           break;
         case 5: // Wait for temperature change (continue if < 0.5°C)
-          if (abs( ( getParameter(PARAM_TEMP_EXT1) + getParameter(PARAM_TEMP_EXT2) ) / 2 - getParameter(PARAM_TEMP_TARGET)) < value) {
+          if (abs( ( getParameter(PARAM_TEMP_EXT1) + getParameter(PARAM_TEMP_EXT2) ) / 2.0 - getParameter(PARAM_TEMP_TARGET)) < value) {
             index++;
           }
           break;

@@ -114,9 +114,9 @@
 #define PARAM_TEMP_TARGET    4   // E - target temperature of the liquid
 
 #define PARAM_WEIGHT                  5  // F - in unit of the balance
-#define PARAM_WEIGHT_G                6  // G - in unit of the balance
+#define PARAM_WEIGHT_G                6  // G - in unit of the balance (gr)
 #define PARAM_WEIGHT_SINCE_LAST_EVENT 7  // H - last weight
-#define PARAM_WEIGHT_MAX              8  // J
+#define PARAM_WEIGHT_MAX              8  // I - Maximum weight
 
 #define PARAM_STEPPER_SPEED        26   // AA - motor speed, in RPM
 #define PARAM_STEPPER_SECONDS      27   // AB   number of seconds before changing direction
