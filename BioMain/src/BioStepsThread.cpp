@@ -61,7 +61,7 @@ THD_FUNCTION(ThreadSteps, arg) {
       index++;
     } else { // it is an action
       int waitingTime = getParameter( PARAM_CURRENT_WAIT_TIME );
-      uint16_t currentWeight = getParameter( PARAM_WEIGHT_G );
+      uint16_t currentWeight = getParameter( PARAM_WEIGHT );
       switch ( parameter ) {
         case 0: // Do nothing
           index++;
@@ -89,24 +89,22 @@ THD_FUNCTION(ThreadSteps, arg) {
           }
           break;
         case 3: // Wait for weight reduction to yy grams
-          reductionWeight = getParameter( PARAM_WEIGHT_MAX ) * value / 100;
-          if( currentWeight > reductionWeight ) {
-            setParameterBit( PARAM_STATUS, FLAG_FOOD_CONTROL );
-            setParameterBit( PARAM_STATUS, FLAG_RELAY_EMPTYING );
+          reductionWeight = ( getParameter( PARAM_WEIGHT_MAX ) - getParameter( PARAM_WEIGHT_EMPTY ) ) * value / 100 - getParameter( PARAM_WEIGHT_EMPTY );
+          if (reductionWeight > getParameter( PARAM_WEIGHT_EMPTY ) )
+          {
+            reductionWeight = getParameter( PARAM_WEIGHT_EMPTY );
           }
-          else {
-            clearParameterBit( PARAM_STATUS, FLAG_RELAY_EMPTYING );
+          if( currentWeight >= reductionWeight ) {
             index++;
           }
           break;
         case 4: // Wait for weight increase to yy grams
-          increaseWeight = getParameter( PARAM_WEIGHT_MAX )  * value / 100;
-          if( currentWeight < increaseWeight ) {
-            setParameterBit( PARAM_STATUS, FLAG_FOOD_CONTROL );
-            setParameterBit( PARAM_STATUS, FLAG_RELAY_FILLING );
+          increaseWeight = (( getParameter( PARAM_WEIGHT_MAX ) - getParameter( PARAM_WEIGHT_EMPTY ) ) * value ) / 100 - getParameter( PARAM_WEIGHT_EMPTY );
+          if (increaseWeight < getParameter( PARAM_WEIGHT_MAX ) )
+          {
+            increaseWeight = getParameter( PARAM_WEIGHT_MAX );
           }
-          else {
-            clearParameterBit(PARAM_STATUS, FLAG_RELAY_FILLING );
+          if( currentWeight < increaseWeight ) {
             index++;
           }
           break;
@@ -117,7 +115,6 @@ THD_FUNCTION(ThreadSteps, arg) {
           break;
         // Empty
         case 8:
-          Serial.println("8");
           setParameter(PARAM_STATUS, value);
           index++;
           break;
