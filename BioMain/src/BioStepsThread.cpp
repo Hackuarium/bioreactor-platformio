@@ -92,16 +92,17 @@ THD_FUNCTION(ThreadSteps, arg) {
           }
           break;
         case 3:  // Wait for weight reduction in percentage
-          targetWeight = fullEmptyWeightDifference * value / 100.0 +
-                         getParameter(PARAM_WEIGHT_EMPTY);
+          targetWeight = ((float)(fullEmptyWeightDifference) * (value  / 100.0) +
+                         (float)getParameter(PARAM_WEIGHT_EMPTY));
+          //Serial.println(targetWeight);
           if ((targetWeight < 0 && currentWeight >= targetWeight) ||
               (targetWeight > 0 && currentWeight <= targetWeight)) {
             index++;
           }
           break;
         case 4:  // Wait for weight increase in percentage
-          targetWeight = fullEmptyWeightDifference * value / 100.0 +
-                         getParameter(PARAM_WEIGHT_EMPTY);
+          targetWeight = ((float)(fullEmptyWeightDifference) * (value / 100.0) +
+                         (float)getParameter(PARAM_WEIGHT_EMPTY));
           if ((targetWeight < 0 && currentWeight <= targetWeight) ||
               (targetWeight > 0 && currentWeight >= targetWeight)) {
             index++;
