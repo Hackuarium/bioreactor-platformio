@@ -101,8 +101,9 @@ THD_FUNCTION(ThreadSteps, arg) {
           }
           break;
         case 4:  // Wait for weight increase in percentage
-          targetWeight = ((float)(fullEmptyWeightDifference) * (value / 100.0) +
-                         (float)getParameter(PARAM_WEIGHT_EMPTY));
+          // targetWeight = ((float)(fullEmptyWeightDifference) * (value / 100.0) + (float)getParameter(PARAM_WEIGHT_EMPTY));
+          targetWeight = getParameter(PARAM_WEIGHT_EMPTY) > 0 ? ((float)(fullEmptyWeightDifference) * (value  / 100.0) + (float)getParameter(PARAM_WEIGHT_EMPTY)) : -((float)(fullEmptyWeightDifference) * (value  / 100.0) + (float)getParameter(PARAM_WEIGHT_EMPTY));
+          
           if ((targetWeight < 0 && currentWeight <= targetWeight) ||
               (targetWeight > 0 && currentWeight >= targetWeight)) {
             index++;
