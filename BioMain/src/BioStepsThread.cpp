@@ -38,8 +38,8 @@ THD_FUNCTION(ThreadSteps, arg) {
     byte parameter = (stepValue & 0b0111100000000000) >> 11;
     byte currentMinute = getMinute();
     int value = stepValue & 0b0000011111111111;
-    int fullEmptyWeightDifference =
-        getParameter(PARAM_WEIGHT_MAX) - getParameter(PARAM_WEIGHT_EMPTY);
+    int fullEmptyWeightDifference = abs(
+        getParameter(PARAM_WEIGHT_MAX) - getParameter(PARAM_WEIGHT_EMPTY) );
     /*
     if (DEBUG_STEPS) {
       Serial.print("======> ");
@@ -92,8 +92,8 @@ THD_FUNCTION(ThreadSteps, arg) {
           }
           break;
         case 3:  // Wait for weight reduction in percentage
-          targetWeight = ((float)(fullEmptyWeightDifference) * (value  / 100.0) +
-                         (float)getParameter(PARAM_WEIGHT_EMPTY));
+          // targetWeight = ((float)(fullEmptyWeightDifference) * (value  / 100.0) + (float)getParameter(PARAM_WEIGHT_EMPTY));
+          targetWeight = getParameter(PARAM_WEIGHT_EMPTY) > 0 ? ((float)(fullEmptyWeightDifference) * (value  / 100.0) + (float)getParameter(PARAM_WEIGHT_EMPTY)) : -((float)(fullEmptyWeightDifference) * (value  / 100.0) + (float)getParameter(PARAM_WEIGHT_EMPTY));
           //Serial.println(targetWeight);
           if ((targetWeight < 0 && currentWeight >= targetWeight) ||
               (targetWeight > 0 && currentWeight <= targetWeight)) {
