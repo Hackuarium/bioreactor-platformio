@@ -38,8 +38,8 @@ THD_FUNCTION(ThreadSteps, arg) {
     byte parameter = (stepValue & 0b0111100000000000) >> 11;
     byte currentMinute = getMinute();
     int value = stepValue & 0b0000011111111111;
-    int fullEmptyWeightDifference = abs(
-        getParameter(PARAM_WEIGHT_MAX) - getParameter(PARAM_WEIGHT_EMPTY) );
+    int fullEmptyWeightDifference =
+        abs(getParameter(PARAM_WEIGHT_MAX) - getParameter(PARAM_WEIGHT_EMPTY));
     /*
     if (DEBUG_STEPS) {
       Serial.print("======> ");
@@ -64,6 +64,7 @@ THD_FUNCTION(ThreadSteps, arg) {
     } else {  // it is an action
       int waitingTime = getParameter(PARAM_CURRENT_WAIT_TIME);
       int currentWeight = getParameter(PARAM_WEIGHT);
+      Serial.println(currentWeight);
       switch (parameter) {
         case 0:  // Do nothing
           index++;
@@ -92,18 +93,21 @@ THD_FUNCTION(ThreadSteps, arg) {
           }
           break;
         case 3:  // Wait for weight reduction in percentage
-          // targetWeight = ((float)(fullEmptyWeightDifference) * (value  / 100.0) + (float)getParameter(PARAM_WEIGHT_EMPTY));
-          targetWeight = getParameter(PARAM_WEIGHT_EMPTY) > 0 ? ((float)(fullEmptyWeightDifference) * (value  / 100.0) + (float)getParameter(PARAM_WEIGHT_EMPTY)) : -((float)(fullEmptyWeightDifference) * (value  / 100.0) + (float)getParameter(PARAM_WEIGHT_EMPTY));
-          //Serial.println(targetWeight);
+          targetWeight = ((float)(fullEmptyWeightDifference) * (value / 100.0) +
+                          (float)getParameter(PARAM_WEIGHT_EMPTY));
+          // Serial.println(targetWeight);
           if ((targetWeight < 0 && currentWeight >= targetWeight) ||
               (targetWeight > 0 && currentWeight <= targetWeight)) {
             index++;
           }
           break;
         case 4:  // Wait for weight increase in percentage
-          // targetWeight = ((float)(fullEmptyWeightDifference) * (value / 100.0) + (float)getParameter(PARAM_WEIGHT_EMPTY));
-          targetWeight = getParameter(PARAM_WEIGHT_EMPTY) > 0 ? ((float)(fullEmptyWeightDifference) * (value  / 100.0) + (float)getParameter(PARAM_WEIGHT_EMPTY)) : -((float)(fullEmptyWeightDifference) * (value  / 100.0) + (float)getParameter(PARAM_WEIGHT_EMPTY));
-          
+          // targetWeight = ((float)(fullEmptyWeightDifferencue) * (value /
+          // 100.0) + (float)getParameter(PARAM_WEIGHT_EMPTY));
+          targetWeight = ((float)(fullEmptyWeightDifference) * (value / 100.0) +
+                          (float)getParameter(PARAM_WEIGHT_EMPTY));
+          // Serial.println(targetWeight);
+
           if ((targetWeight < 0 && currentWeight <= targetWeight) ||
               (targetWeight > 0 && currentWeight >= targetWeight)) {
             index++;
