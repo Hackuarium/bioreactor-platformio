@@ -39,7 +39,7 @@ THD_FUNCTION(ThreadSteps, arg) {
     byte currentMinute = getMinute();
     int value = stepValue & 0b0000011111111111;
     int fullEmptyWeightDifference =
-        abs(getParameter(PARAM_WEIGHT_MAX) - getParameter(PARAM_WEIGHT_EMPTY));
+        getParameter(PARAM_WEIGHT_MAX) - getParameter(PARAM_WEIGHT_EMPTY);
     /*
     if (DEBUG_STEPS) {
       Serial.print("======> ");
@@ -95,10 +95,12 @@ THD_FUNCTION(ThreadSteps, arg) {
         case 3:  // Wait for weight reduction in percentage
           targetWeight = ((float)(fullEmptyWeightDifference) * (value / 100.0) +
                           (float)getParameter(PARAM_WEIGHT_EMPTY));
-          // Serial.println(targetWeight);
-          if ((targetWeight < 0 && currentWeight >= targetWeight) ||
-              (targetWeight > 0 && currentWeight <= targetWeight)) {
-            index++;
+          Serial.println(targetWeight);
+          if ((fullEmptyWeightDifference < 0 &&
+               currentWeight >= targetWeight) ||
+              (fullEmptyWeightDifference > 0 &&
+               currentWeight <= targetWeight)) {
+            ++index;
           }
           break;
         case 4:  // Wait for weight increase in percentage
@@ -106,11 +108,13 @@ THD_FUNCTION(ThreadSteps, arg) {
           // 100.0) + (float)getParameter(PARAM_WEIGHT_EMPTY));
           targetWeight = ((float)(fullEmptyWeightDifference) * (value / 100.0) +
                           (float)getParameter(PARAM_WEIGHT_EMPTY));
-          // Serial.println(targetWeight);
+          Serial.println(targetWeight);
 
-          if ((targetWeight < 0 && currentWeight <= targetWeight) ||
-              (targetWeight > 0 && currentWeight >= targetWeight)) {
-            index++;
+          if ((fullEmptyWeightDifference < 0 &&
+               currentWeight <= targetWeight) ||
+              (fullEmptyWeightDifference > 0 &&
+               currentWeight >= targetWeight)) {
+            ++index;
           }
           break;
         case 5:  // Wait for temperature change (continue if < 0.5°C)
