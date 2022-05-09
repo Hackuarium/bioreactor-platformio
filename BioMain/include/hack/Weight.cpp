@@ -13,7 +13,7 @@
 //#include <HX711.h>
 #include "libraries/HX711/HX711.h"
 
-HX711 scale(WEIGHT_DATA, WEIGHT_CLK);
+HX711 scale(WEIGHT_DATA, WEIGHT_CLK, 64);
 
 void printWeightHelp(Print* output) {
   output->println(F("Weight help"));
@@ -36,14 +36,16 @@ int getWeight() {  // we can not avoid to have some errors measuring the weight
     }
     chSemWait(&lockTimeCriticalZone);
     long currentWeight = scale.read();
+    // long currentWeight = scale.read_average();
     chSemSignal(&lockTimeCriticalZone);
 
-    if ((currentWeight & 0b11111111) != 1) {
+    if ((currentWeight & 0xFF) != 1) {
       if (weight == 0) {
         weight += currentWeight;
         counter++;
       } else {
         int difference = abs(100 - (weight * 100 / counter) / currentWeight);
+        // int difference = abs((weight / counter) - currentWeight);
         if (difference < 10) {
           weight += currentWeight;
           counter++;
@@ -56,6 +58,7 @@ int getWeight() {  // we can not avoid to have some errors measuring the weight
     }
   }
   return weight / counter / 100;
+  // return weight / counter;
 }
 
 int convertWeightToG(int weight) {
