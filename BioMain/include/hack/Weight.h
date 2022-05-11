@@ -5,6 +5,9 @@
 
 #ifdef THR_WEIGHT
 
+#include <HX711.h>
+HX711 scale;
+
 void printWeightHelp(Print*);
 int getWeight();
 int convertWeightToG(int);
