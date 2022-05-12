@@ -7,10 +7,10 @@
 #include "libraries/time/TimeLib.h"
 
 // Libraries
-#include "EEPROMHack.h"
+#include "HackEEPROM.h"
 #include "EEPROMLogger.h"
 #include "NullStream.h"
-#include "Params.h"
+#include "Funcs.h"
 #include "SSTLogger.h"
 #include "Serial.h"
 #include "SerialUtilities.h"

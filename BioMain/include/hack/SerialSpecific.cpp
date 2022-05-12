@@ -1,9 +1,9 @@
 #include <Arduino.h>
 //#include <TimeLib.h>
 
-#include "BioOneWire.h"
-#include "BioParams.h"
+#include "HackOneWire.h"
 #include "Params.h"
+#include "Funcs.h"
 #include "SSTLogger.h"
 #include "Weight.h"
 #include "libraries/time/TimeLib.h"

@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <BioParams.h>
+#include <Params.h>
 #include <ChNil.h>
 
 #if defined(I2C)

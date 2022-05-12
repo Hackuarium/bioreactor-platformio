@@ -9,7 +9,7 @@ the microcontroler
 #include <ChNil.h>
 #include <avr/wdt.h>
 
-#include "BioParams.h"
+#include "Params.h"
 
 #ifdef THR_MONITORING
 

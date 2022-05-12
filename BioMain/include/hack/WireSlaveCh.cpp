@@ -3,8 +3,8 @@
 #include <ChNil.h>
 #include <Wire.h>
 
-#include "BioParams.h"
 #include "Params.h"
+#include "Funcs.h"
 
 // setting ATmega32U4 as I2C slave.
 #ifdef THR_WIRE_SLAVE

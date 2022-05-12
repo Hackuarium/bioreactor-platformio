@@ -2,7 +2,7 @@
 //#include <OneWire.h>
 #include "libraries/onewire/OneWire.h"
 
-#include "BioParams.h"
+#include "Params.h"
 
 #ifdef THR_ONEWIRE
 

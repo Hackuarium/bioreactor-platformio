@@ -3,8 +3,8 @@
 // Thread allowing serail over usb communication.
 
 #include <ChNil.h>
-#include "BioParams.h"
 #include "Params.h"
+#include "Funcs.h"
 #include "SerialSpecific.h"
 #include "SerialUtilities.h"
 

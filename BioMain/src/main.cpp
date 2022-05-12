@@ -4,9 +4,9 @@
 #define SOFTWARE_VERSION "v0.0.1"
 
 // Import constants
-#include <BioParams.h>
+#include <Params.h>
 // Import internal libraries
-#include <BioHack.h>
+#include <Hack.h>
 
 void checkParameters();
 void initParameters();

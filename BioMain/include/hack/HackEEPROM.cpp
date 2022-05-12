@@ -3,7 +3,7 @@
 #include <avr/eeprom.h>
 //#include <EEPROM.h>
 
-#include "BioParams.h"
+#include "Params.h"
 
 /* The qualifier represents the card ID and is stored just after the last
  * parameter */

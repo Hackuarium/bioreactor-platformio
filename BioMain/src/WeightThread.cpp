@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include <ChNil.h>
 
-#include "BioParams.h"
 #include "Params.h"
+#include "Funcs.h"
 #include "Weight.h"
 
 #ifdef THR_WEIGHT

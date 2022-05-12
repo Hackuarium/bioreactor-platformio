@@ -4,8 +4,8 @@
 //#include <OneWire.h>
 #include "libraries/onewire/OneWire.h"
 
-#include "BioParams.h"
 #include "Params.h"
+#include "Funcs.h"
 
 #ifdef THR_ONEWIRE
 
@@ -32,7 +32,7 @@
     4. Read the next two bytes which represent the temperature
  *********************************************/
 
-#include "BioSem.h"
+#include "Sem.h"
 // SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific
 // zones
 

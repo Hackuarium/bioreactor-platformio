@@ -7,11 +7,8 @@
 //#include <TimeLib.h>
 #include "libraries/time/TimeLib.h"
 
-#include "BioFunc.h"
-//#include <hack/BioFunc.h>
-//#include <hack/BioFunc.h>
-#include "EEPROMHack.h"
-#include "Params.h"
+#include "HackEEPROM.h"
+#include "Funcs.h"
 
 void printUtilitiesHelp(Print* output) {
   output->println(F("(uc) Compact settings"));

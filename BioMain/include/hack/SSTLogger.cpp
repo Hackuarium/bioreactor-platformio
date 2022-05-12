@@ -7,7 +7,7 @@
 SST25VF064 chip The time synchronization works through the NTP protocol and our
 server
 ******************************************************************************************/
-#include "BioParams.h"
+#include "Params.h"
 #include "Hack.h"
 
 #ifdef THR_SST_LOGGER
@@ -23,7 +23,7 @@ server
 #include <avr/wdt.h>
 #include "libraries/time/TimeLib.h"
 
-#include "BioSem.h"
+#include "Sem.h"
 // SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific
 // zones
 
