@@ -10,11 +10,10 @@
 // SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific
 // zones
 
-#include <HX711.h>
-// #include "libraries/HX711/HX711.h"
+// #include <HX711.h>
+#include "libraries/HX711/HX711.h"
 
-HX711 scale;
-scale.begin(WEIGHT_DATA, WEIGHT_CLK, 64);
+HX711 scale(WEIGHT_DATA, WEIGHT_CLK, 64);
 
 void printWeightHelp(Print* output) {
   output->println(F("Weight help"));
@@ -45,7 +44,7 @@ int getWeight() {  // we can not avoid to have some errors measuring the weight
         weight += currentWeight;
         counter++;
       } else {
-        int difference = abs(100 - (weight * 100 / counter) / currentWeight);
+        int difference = abs((long)100 - (weight * (long)100 / (long)counter) / currentWeight);
         // int difference = abs((weight / counter) - currentWeight);
         if (difference < 10) {
           weight += currentWeight;
@@ -58,7 +57,7 @@ int getWeight() {  // we can not avoid to have some errors measuring the weight
       chThdSleep(10);
     }
   }
-  return weight / counter / 100;
+  return (weight / (long)counter / 100);
   // return weight / counter;
 }
 
