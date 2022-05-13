@@ -75,7 +75,7 @@ SST sst = SST('F', 4);  // A3 is PORT F - 4
 #endif
 
 uint32_t nextEntryID = 0;
-bool logActive = false;
+bool logActive = true;
 
 uint32_t findAddressOfEntryN(uint32_t entryN);
 
