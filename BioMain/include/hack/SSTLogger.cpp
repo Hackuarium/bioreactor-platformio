@@ -156,7 +156,6 @@ void writeLog(uint16_t event_number, int parameter_value) {
   if (isLogValid) {
     // Update the value of the next event log position in the memory
     nextEntryID++;
-    Serial.println("log success");
   } else {
     Serial.print(F("Log fail "));
     Serial.println(nextEntryID);
