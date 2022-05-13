@@ -64,7 +64,6 @@ THD_FUNCTION(ThreadSteps, arg) {
     } else {  // it is an action
       int waitingTime = getParameter(PARAM_CURRENT_WAIT_TIME);
       int currentWeight = getParameter(PARAM_WEIGHT);
-      Serial.println(currentWeight);
       switch (parameter) {
         case 0:  // Do nothing
           index++;
