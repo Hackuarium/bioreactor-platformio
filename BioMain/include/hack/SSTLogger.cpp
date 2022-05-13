@@ -75,6 +75,7 @@ SST sst = SST('F', 4);  // A3 is PORT F - 4
 #endif
 
 uint32_t nextEntryID = 0;
+// Deactivate safeguard to store log into memory
 bool logActive = true;
 
 uint32_t findAddressOfEntryN(uint32_t entryN);
@@ -137,7 +138,8 @@ void writeLog(uint16_t event_number, int parameter_value) {
           And no other thread will change any of the values !!!!!!
   ******************************/
   bool isLogValid = true;
-  sst.flashReadInit(findAddressOfEntryN(nextEntryID));
+  // sst.flashReadInit(findAddressOfEntryN(nextEntryID));
+  sst.flashReadInit(startAddress);
   if (sst.flashReadNextInt32() != nextEntryID)
     isLogValid = false;
   if (sst.flashReadNextInt32() != timenow)
@@ -154,6 +156,7 @@ void writeLog(uint16_t event_number, int parameter_value) {
   if (isLogValid) {
     // Update the value of the next event log position in the memory
     nextEntryID++;
+    Serial.println("log success");
   } else {
     Serial.print(F("Log fail "));
     Serial.println(nextEntryID);
