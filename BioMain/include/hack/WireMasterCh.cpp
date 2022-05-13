@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include <ChNil.h>
 
-#include "BioParams.h"
 #include "Params.h"
+#include "Funcs.h"
 
 // setting ATmega32U4 as I2C slave.
 #ifdef THR_WIRE_SLAVE
@@ -13,7 +13,7 @@
 byte numberI2CDevices = 0;
 byte wireDeviceID[WIRE_MAX_DEVICES];
 
-#include "BioSem.h"
+#include "Sem.h"
 // SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific
 // zones
 

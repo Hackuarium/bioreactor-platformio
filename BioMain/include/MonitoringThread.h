@@ -8,7 +8,7 @@ there are not too many activities on the microcontroler
 #include <Arduino.h>
 #include <ChNil.h>
 
-#include "BioParams.h"
+#include "Params.h"
 
 #ifdef THR_MONITORING
 

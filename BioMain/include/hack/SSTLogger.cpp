@@ -7,7 +7,7 @@
 SST25VF064 chip The time synchronization works through the NTP protocol and our
 server
 ******************************************************************************************/
-#include "BioParams.h"
+#include "Params.h"
 #include "Hack.h"
 
 #ifdef THR_SST_LOGGER
@@ -23,7 +23,7 @@ server
 #include <avr/wdt.h>
 #include "libraries/time/TimeLib.h"
 
-#include "BioSem.h"
+#include "Sem.h"
 // SEMAPHORE_DECL(lockTimeCriticalZone, 1); // only one process in some specific
 // zones
 
@@ -75,7 +75,8 @@ SST sst = SST('F', 4);  // A3 is PORT F - 4
 #endif
 
 uint32_t nextEntryID = 0;
-bool logActive = false;
+// Deactivate safeguard to store log into memory
+bool logActive = true;
 
 uint32_t findAddressOfEntryN(uint32_t entryN);
 
@@ -137,7 +138,8 @@ void writeLog(uint16_t event_number, int parameter_value) {
           And no other thread will change any of the values !!!!!!
   ******************************/
   bool isLogValid = true;
-  sst.flashReadInit(findAddressOfEntryN(nextEntryID));
+  // sst.flashReadInit(findAddressOfEntryN(nextEntryID));
+  sst.flashReadInit(startAddress);
   if (sst.flashReadNextInt32() != nextEntryID)
     isLogValid = false;
   if (sst.flashReadNextInt32() != timenow)

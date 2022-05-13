@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#include "Params.h"
+#include "Funcs.h"
 #include "SSTLogger.h"
 
 bool isError(int filter) {

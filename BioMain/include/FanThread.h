@@ -1,6 +1,6 @@
 #include <ChNil.h>
-//#include "BioParams.h"
-#include "hack/BioParams.h"
+//#include "Params.h"
+#include "hack/Params.h"
 
 #ifdef THR_FAN
 

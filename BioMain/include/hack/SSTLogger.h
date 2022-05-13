@@ -7,7 +7,7 @@
 SST25VF064 chip The time synchronization works through the NTP protocol and our
 server
 ******************************************************************************************/
-#include "BioParams.h"
+#include "Params.h"
 #ifdef THR_SST_LOGGER
 
 #include <Arduino.h>

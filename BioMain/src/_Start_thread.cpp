@@ -8,50 +8,50 @@ there are not too many activities on the microcontroler
 #include <Arduino.h>
 #include <ChNil.h>
 
-#include <BioParams.h>
+#include <Params.h>
 
 #ifdef THR_MONITORING
-#include "BioMonitoringThread.h"
+#include "MonitoringThread.h"
 #endif
 
 #ifdef THR_SST_LOGGER
-#include "BioSSTThread.h"
+#include "SSTThread.h"
 #endif
 
 #ifdef THR_SERIAL
-#include "BioSerialThread.h"
+#include "SerialThread.h"
 #endif
 
 #ifdef THR_ONEWIRE
-#include "BioOneWireThread.h"
+#include "OneWireThread.h"
 #endif
 
 #ifdef THR_FAN
-#include "BioFanThread.h"
+#include "FanThread.h"
 #endif
 
 #ifdef THR_ERROR
-#include "BioErrorThread.h"
+#include "ErrorThread.h"
 #endif
 
 #ifdef THR_PID
-#include "BioPIDThread.h"
+#include "PIDThread.h"
 #endif
 
 #ifdef THR_STEPPER
-#include "BioStepperThread.h"
+#include "StepperThread.h"
 #endif
 
 #ifdef THR_STEPS
-#include "BioStepsThread.h"
+#include "StepsThread.h"
 #endif
 
 #ifdef THR_WEIGHT
-#include "BioWeightThread.h"
+#include "WeightThread.h"
 #endif
 
 #ifdef THR_OUTPUTS
-#include "BioOutputsThread.h"
+#include "OutputsThread.h"
 #endif
 
 /*******************************************************************************

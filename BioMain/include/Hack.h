@@ -7,9 +7,9 @@
 #include <TimeLib.h>
 
 // Libraries
-#include "EEPROMHack.h"
+#include "HackEEPROM.h"
 #include "NullStream.h"
-#include "Params.h"
+#include "Funcs.h"
 #include "ToHex.h"
 #include "Utility.h"
 //#include "EEPROMLogger.h"
