@@ -6,19 +6,19 @@
 const char hex[] = "0123456789ABCDEF";
 
 uint8_t toHex(Print* output, byte value) {
-  output->print(hex[value >> 4 & 15]);
-  output->print(hex[value >> 0 & 15]);
+  output->print( ( value >> 4 ) & 0x0F, HEX);
+  output->print( value & 0x0F, HEX);
   return value;
 }
 
 uint8_t toHex(Print* output, int value) {
-  byte checkDigit = toHex(output, (byte)(value >> 8 & 255));
-  checkDigit ^= toHex(output, (byte)(value >> 0 & 255));
+  byte checkDigit = toHex(output, (byte)( value >> 8 & 0x00FF ) );
+  checkDigit ^= toHex(output, (byte)(value & 0x00FF));
   return checkDigit;
 }
 
 uint8_t toHex(Print* output, long value) {
-  byte checkDigit = toHex(output, (int)(value >> 16 & 65535));
-  checkDigit ^= toHex(output, (int)(value >> 0 & 65535));
+  byte checkDigit = toHex(output, (int)( value >> 16 & 0x0000FFFF ));
+  checkDigit ^= toHex(output, (int)(value & 0x0000FFFF));
   return checkDigit;
 }
