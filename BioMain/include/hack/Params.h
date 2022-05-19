@@ -102,16 +102,16 @@
 #define EVENT_LOGGING 1
 #endif
 
-#define PARAM_TEMP_EXT1 0  // A - temperature of the solution
-#define PARAM_TEMP_EXT2 1  // B - temperature of the solution
+#define PARAM_TEMP_EXT1 0  // A - Temperature of the solution
+#define PARAM_TEMP_EXT2 1  // B - Temperature of the solution
 
-#define PARAM_TEMP_PCB 2     // C - temperature of the heating plate
-#define PARAM_PID 3          // D - heating amount of energy
-#define PARAM_TEMP_TARGET 4  // E - target temperature of the liquid
+#define PARAM_TEMP_PCB 2     // C - Temperature of the heating plate
+#define PARAM_PID 3          // D - Heating amount of energy
+#define PARAM_TEMP_TARGET 4  // E - Target temperature of the liquid
 
-#define PARAM_WEIGHT 5                   // F - in unit of the balance
-#define PARAM_WEIGHT_G 6                 // G - in unit of the balance (gr)
-#define PARAM_WEIGHT_SINCE_LAST_EVENT 7  // H - last weight
+#define PARAM_WEIGHT 5       // F - Weight in unit of the balance
+#define PARAM_WEIGHT_G 6     // G - Weight in unit of the balance (gr)
+#define PARAM_WEIGHT_SINCE_LAST_EVENT 7  // H - Last weight
 #define PARAM_WEIGHT_MAX 8               // I - Maximum weight
 
 #define PARAM_STEPPER_SPEED 26  // AA - motor speed, in RPM
@@ -125,8 +125,9 @@
 #define PARAM_WEIGHT_EMPTY \
   30  // AE - Weight calibration: digital offset value when bioreactor is empty
 
-#define PARAM_CURRENT_STEP 22
-#define PARAM_CURRENT_WAIT_TIME 23
+#define PARAM_CURRENT_STEP 22         // W - Current step
+#define PARAM_CURRENT_WAIT_TIME 23    // X - Waiting time
+
 // 36-51 is used by the 16 allowed step
 #define FIRST_STEP_PARAMETER 52  // BA
 #define LAST_STEP_PARAMETER 67   // BP
@@ -135,7 +136,7 @@
 /******************
    FLAG DEFINITION
  ******************/
-#define PARAM_ERROR 24  // Y - errors
+#define PARAM_ERROR 24  // Y - Errors
 // extern const int PARAM_ERROR;
 #define FLAG_TEMP_PCB_PROBE_ERROR \
   0  // pcb probe failed (one wire not answering)
