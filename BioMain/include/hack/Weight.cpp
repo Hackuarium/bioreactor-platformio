@@ -36,7 +36,6 @@ int getWeight() {  // we can not avoid to have some errors measuring the weight
     }
     chSemWait(&lockTimeCriticalZone);
     long currentWeight = scale.read();
-    // long currentWeight = scale.read_average();
     chSemSignal(&lockTimeCriticalZone);
 
     if ((currentWeight & 0xFF) != 1) {
@@ -57,7 +56,9 @@ int getWeight() {  // we can not avoid to have some errors measuring the weight
       chThdSleep(10);
     }
   }
-  return (weight / (long)counter / 100);
+  // return (weight / (long)counter / 100);
+  // Check ADC resolution for the bioreactor to reduce error in reading
+  return (weight / (long)counter) & 0x0000FFFF;
   // return weight / counter;
 }
 
