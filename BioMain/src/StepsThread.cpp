@@ -124,6 +124,8 @@ THD_FUNCTION(ThreadSteps, arg) {
         // Empty
         case 8:
           setParameter(PARAM_STATUS, value);
+          // Duplicate PARAM_STATUS to send in the logger
+          setParameter(21, value);
           index++;
           break;
         default:
