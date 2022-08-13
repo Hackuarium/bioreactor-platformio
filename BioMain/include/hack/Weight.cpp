@@ -11,6 +11,7 @@
 // zones
 
 // #include <HX711.h>
+// #include "libraries/HX711/HX711.h"
 #include "libraries/HX711/HX711.h"
 
 HX711 scale(WEIGHT_DATA, WEIGHT_CLK, 64);
@@ -28,9 +29,19 @@ int getWeight() {  // we can not avoid to have some errors measuring the weight
   // so we need to find out what are the correct values and what are the wrong
   // one if there is an error it always end with 00000001 we will also need 4
   // consecutive values that differ less than 10%
+
+  // Set scale and tare for first reading
+  static bool check = TRUE;
+
+  if(check) {
+    scale.set_scale();
+    scale.tare(); //Reset the scale to 0
+    check = FALSE;
+  }
+
   byte counter = 0;
   long weight = 0;
-  while (counter < 4) {
+  while (counter < 16) {
     while (!scale.is_ready()) {
       chThdSleep(10);
     }
@@ -56,10 +67,13 @@ int getWeight() {  // we can not avoid to have some errors measuring the weight
       chThdSleep(10);
     }
   }
-  // return (weight / (long)counter / 100);
+  // Right shift n times
+  weight >>= 2;
+
   // Check ADC resolution for the bioreactor to reduce error in reading
-  return (weight / (long)counter) & 0x0000FFFF;
-  // return weight / counter;
+  return (weight >> 8) & 0x0000FFFF;
+
+  // return (weight / (long)counter / 100);
 }
 
 int convertWeightToG(int weight) {

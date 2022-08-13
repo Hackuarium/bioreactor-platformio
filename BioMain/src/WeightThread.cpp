@@ -11,7 +11,7 @@ THD_FUNCTION(ThreadWeight, arg) {
   chThdSleep(1234);  // wait a little bit not everything starts at once
 
   /********************************************
-               initialisation
+               initialization
   ********************************************/
   int weight;
 
@@ -25,6 +25,8 @@ THD_FUNCTION(ThreadWeight, arg) {
                            // weight increase
     setParameter(PARAM_WEIGHT, weight);
     setParameter(PARAM_WEIGHT_G, convertWeightToG(weight));
+
+    Serial.println(weight);
 
     // are we outside ranges ?
 

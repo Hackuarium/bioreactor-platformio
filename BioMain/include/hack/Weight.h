@@ -5,6 +5,8 @@
 
 #ifdef THR_WEIGHT
 
+#include "libraries/HX711/HX711.h"
+
 void printWeightHelp(Print*);
 int getWeight();
 int convertWeightToG(int);
