@@ -26,7 +26,7 @@ THD_FUNCTION(ThreadWeight, arg) {
     setParameter(PARAM_WEIGHT, weight);
     setParameter(PARAM_WEIGHT_G, convertWeightToG(weight));
 
-    Serial.println(weight);
+    // Serial.println(weight);
 
     // are we outside ranges ?
 
