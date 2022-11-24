@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include <ChNil.h>
 
-#include "Params.h"
 #include "Funcs.h"
+#include "Params.h"
 #include "Weight.h"
 
 #ifdef THR_WEIGHT
@@ -26,7 +26,7 @@ THD_FUNCTION(ThreadWeight, arg) {
     setParameter(PARAM_WEIGHT, weight);
     setParameter(PARAM_WEIGHT_G, convertWeightToG(weight));
 
-    Serial.println(weight);
+    // Serial.println(weight);
 
     // are we outside ranges ?
 

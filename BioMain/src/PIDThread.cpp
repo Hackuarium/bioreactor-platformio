@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include <ChNil.h>
 
-#include "Params.h"
 #include "Funcs.h"
+#include "Params.h"
 
 #ifdef THR_PID
 
@@ -23,11 +23,12 @@ double heatingRegInput;
 double heatingRegOutput;
 double heatingRegSetpoint;
 // Specify the heating regulation links and initial tuning parameters
+// 20220520: Kp = 1.5 Ki = 0.0002 Kd = 5.0
 PID heatingRegPID(&heatingRegInput,
                   &heatingRegOutput,
                   &heatingRegSetpoint,
                   1.5,
-                  0.0002,
+                  0.0004,
                   5.0,
                   DIRECT);
 
@@ -58,8 +59,11 @@ void pid_ctrl() {
     return;
   }
 
+  // heatingRegInput = max(getParameter(PARAM_TEMP_EXT1),
+  // getParameter(PARAM_TEMP_EXT2));
   heatingRegInput =
-      max(getParameter(PARAM_TEMP_EXT1), getParameter(PARAM_TEMP_EXT2));
+      (double)(getParameter(PARAM_TEMP_EXT1) + getParameter(PARAM_TEMP_EXT2)) /
+      2.0;
   heatingRegSetpoint = getParameter(PARAM_TEMP_TARGET);
   heatingRegPID.Compute();  // the computation takes only 30ms!
   setParameter(PARAM_PID, heatingRegOutput);
